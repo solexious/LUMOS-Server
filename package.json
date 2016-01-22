@@ -1,0 +1,23 @@
+{
+  "name": "lumos",
+  "version": "0.0.1",
+  "description": "Central hearbeat server for wifi artnet leds",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solexious/lumos.git"
+  },
+  "author": "Charles Yarnold",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/solexious/lumos/issues"
+  },
+  "homepage": "https://github.com/solexious/lumos#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.4"
+  }
+}
