@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Lumos Server</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px "Courier New", Courier, monospace; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      .greyText { color: #C2C2C2; }
+      .alertText { color: red; animation: blinker 1s linear infinite; }
+      @keyframes blinker {  
+			  50% { opacity: 0.0; }
+			}
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.0/jquery.timeago.js" type="text/javascript"></script>
+	<script>
+	  var socket = io();
+
+		socket.on('chat message', function(msg){
+			var id = msg.mac.replace(/:/g, '-');
+			console.info("Got a message with id '%s': %o", id, msg);
+			var li = $('#' + id);
+			if (!li.length) {
+				li = $('<li>', { id: id }).appendTo('#messages');
+			}
+			var text = msg.mac + " - " + msg.ip + " - Voltage:" + msg.voltage + " - Seconds since heartbeat: <span class=\"timeCount\">0</span>";
+			li.html(text);
+			li.removeClass("greyText");
+		});
+
+		window.setInterval( function(){ 
+	    // Do something after 1 second 
+	    $('.timeCount').each(function( index ) {
+	    	var secs = parseInt($(this).html());
+
+	    	if(secs < 99){
+		    	$(this).html(parseInt($(this).html(), 10)+1);
+		    	if(secs == 30){
+		    		$(this).parent().addClass("greyText");
+		    	}
+		    }
+		    else{
+		    	$(this).parent().remove();
+		    }
+	  	});
+	  }  , 1000 );
+
+	</script>
+  </body>
+</html>
