@@ -15,17 +15,9 @@ var UDP_HOST = '0.0.0.0';
 
 server.listen(3000);
 
-// app.get('/', function (req, res) {
-//   res.sendFile(__dirname + '/public/index.html');
-// });
-
 var nodeIDs = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
 
 app.use('/', express.static(path.join(__dirname, 'public')));
-
-app.get('/jquery-1.11.1.js', function (req, res) {
-  res.sendFile(__dirname + '/public/jquery-1.11.1.js');
-});
 
 io.on('connection', function(socket){
   console.log('a user connected');
