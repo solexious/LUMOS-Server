@@ -1,6 +1,9 @@
 var app = require('express')();
+var express = require('express');
+var path = require('path');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var fs = require('fs');
 
 
 var dgram = require('dgram');
@@ -12,8 +15,16 @@ var UDP_HOST = '0.0.0.0';
 
 server.listen(3000);
 
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
+// app.get('/', function (req, res) {
+//   res.sendFile(__dirname + '/public/index.html');
+// });
+
+var nodeIDs = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
+
+app.use('/', express.static(path.join(__dirname, 'public')));
+
+app.get('/jquery-1.11.1.js', function (req, res) {
+  res.sendFile(__dirname + '/public/jquery-1.11.1.js');
 });
 
 io.on('connection', function(socket){
@@ -21,11 +32,11 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
-});
 
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.on('syncRequest', function(msg){
+    // Grab all entries and send them
+    console.log('syncRequest received');
+    socket.emit('syncResponce', nodeIDs);
   });
 });
 
@@ -37,15 +48,26 @@ udp.on('listening', function () {
 });
 
 udp.on('message', function (message, remote) {
-	// console.log(`server got: ${message} from ${remote.address}:${remote.port}`);
+	console.log(`got:${message}`);
 
     var messageJSON = safelyParseJSON(message.toString());
 
     if(messageJSON != undefined){
-	    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.voltage != undefined)){
+	    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
 	      // console.log(messageJSON);
 	      // Add code to emit io message
-	      io.emit('chat message', messageJSON);
+        messageJSON.nodeID = nodeIDs[messageJSON.name].nodeID;
+        messageJSON.colour = nodeIDs[messageJSON.name].colour;
+        messageJSON.enabled = nodeIDs[messageJSON.name].enabled;
+        nodeIDs[messageJSON.name].online = true;
+        messageJSON.online = nodeIDs[messageJSON.name].online;
+        if(nodeIDs[messageJSON.name].current_voltage_data.push(messageJSON.current_voltage) > 6500){
+          nodeIDs[messageJSON.name].current_voltage_data.shift();
+        }
+        if(nodeIDs[messageJSON.name].lowest_voltage_data.push(messageJSON.lowest_voltage) > 6500){
+          nodeIDs[messageJSON.name].lowest_voltage_data.shift();
+        }
+	      io.emit('beat', messageJSON);
 	      //io.emit('heartbeat', messageJSON);
 	    }
 	}

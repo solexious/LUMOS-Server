@@ -1,0 +1,402 @@
+{
+	"LUMOS-145DEF" : {
+		"nodeID" : 1,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-146035" : {
+		"nodeID" : 2,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-145DED" : {
+		"nodeID" : 3,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-145D55" : {
+		"nodeID" : 4,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-147EF9" : {
+		"nodeID" : 5,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-148E65" : {
+		"nodeID" : 6,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-15063D" : {
+		"nodeID" : 7,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-14B47D" : {
+		"nodeID" : 8,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507E9" : {
+		"nodeID" : 9,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-150857" : {
+		"nodeID" : 10,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507BF" : {
+		"nodeID" : 11,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B1" : {
+		"nodeID" : 12,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B2" : {
+		"nodeID" : 13,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B3" : {
+		"nodeID" : 14,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B4" : {
+		"nodeID" : 15,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B5" : {
+		"nodeID" : 16,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B6" : {
+		"nodeID" : 17,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B7" : {
+		"nodeID" : 18,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B8" : {
+		"nodeID" : 19,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B9" : {
+		"nodeID" : 20,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507B0" : {
+		"nodeID" : 21,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bq" : {
+		"nodeID" : 22,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bw" : {
+		"nodeID" : 23,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Be" : {
+		"nodeID" : 24,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Br" : {
+		"nodeID" : 25,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bt" : {
+		"nodeID" : 26,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507By" : {
+		"nodeID" : 27,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bu" : {
+		"nodeID" : 28,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bi" : {
+		"nodeID" : 29,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bo" : {
+		"nodeID" : 30,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bp" : {
+		"nodeID" : 31,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Ba" : {
+		"nodeID" : 32,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bs" : {
+		"nodeID" : 33,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bd" : {
+		"nodeID" : 34,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bg" : {
+		"nodeID" : 35,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bh" : {
+		"nodeID" : 36,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bj" : {
+		"nodeID" : 37,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bk" : {
+		"nodeID" : 38,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bl" : {
+		"nodeID" : 39,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bz" : {
+		"nodeID" : 40,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bx" : {
+		"nodeID" : 41,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bc" : {
+		"nodeID" : 42,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bv" : {
+		"nodeID" : 43,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bb" : {
+		"nodeID" : 44,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bn" : {
+		"nodeID" : 45,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507Bm" : {
+		"nodeID" : 46,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507qq" : {
+		"nodeID" : 47,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507ww" : {
+		"nodeID" : 48,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507ee" : {
+		"nodeID" : 49,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	},
+	"LUMOS-1507rr" : {
+		"nodeID" : 50,
+		"colour" : "000000",
+		"enabled" : true,
+		"online" : false,
+		"current_voltage_data" : [],
+		"lowest_voltage_data" : []
+	}
+}

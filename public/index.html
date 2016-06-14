@@ -1,58 +1,441 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Lumos Server</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px "Courier New", Courier, monospace; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      .greyText { color: #C2C2C2; }
-      .alertText { color: red; animation: blinker 1s linear infinite; }
-      @keyframes blinker {  
-			  50% { opacity: 0.0; }
-			}
-    </style>
-  </head>
-  <body>
-    <ul id="messages"></ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>LUMOS - Command &amp; Control</title>
 
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap theme -->
+  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+      <style type="text/css">
+        iframe[seamless]{
+          background-color: transparent;
+          border: 0px none transparent;
+          padding: 0px;
+          overflow: hidden;
+        }
+
+        .btn-pad {
+          padding-top: 15px;
+        }
+
+        .content{
+          display:none;
+        }
+
+        .content.active{
+          display:block;
+        }
+
+        a.disabled {
+          pointer-events: none;
+        }
+
+        .btnNode {
+          padding: 7px !important;
+        }
+
+        .btnNodeDrop {
+          padding-top: 7px !important;
+          padding-bottom: 7px !important;
+          padding-left: 9px !important;
+          padding-right: 9px !important;
+        }
+
+        .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+          padding-right: 5px;
+          padding-left: 5px;
+        }
+      </style>
+    </head>
+    <body>
+      <br/>
+      <ul class="nav nav-tabs">
+        <li role="presentation">&nbsp;&nbsp;</li>
+        <li role="presentation" rel="overview" class="active"><a href="#">Overview</a></li>
+        <li role="presentation" rel="server_settings"><a href="#">Server Settings</a></li>
+      </ul>
+
+      <!-- Overview Panel -->
+      <div class="content active" id="overview">
+        <div class="container-fluid">
+          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Node Panels -->
+            <div id="nodeButtons">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="height: 100%">
+            <iframe src="" name="nodeframe" seamless="seamless" width="100%" style="height: calc(100vh - 70px)"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Server Settings Panel -->
+      <div class="content" id="server_settings">
+        <div class="container">
+          <div class="col-sm-12">
+            &nbsp;
+          </div>
+        </div>
+      </div>
+
+      <div id="nodeModals">
+      </div>
+
+      <!-- Confirm shutdown Modal -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="shutdownModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Shutdown Node</h4>
+            </div>
+            <div class="modal-body">
+              <p></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <a class="btn btn-danger" id="modalShutdownBTN" href="#" target="nodeframe" onclick="$('#shutdownModal').modal('hide');">Shutdown</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script id="nodeButtonTemplate" type="x-handlebars-template">
+        <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 text-center nodeButton" id="nodeButton{{ nodeID }}">
+          <div class="btn-group btn-pad">
+            <button type="button" class="btn btn-danger btnNode" id="nodeButtonMain{{ nodeID }}" data-toggle="modal" data-target="#nodeDetailModal{{ nodeID }}"><span class="glyphicon glyphicon-stop" aria-hidden="true" style="font-size: 13px; color: #{{ colour }};"></span> {{ nodeID }}<!-- - {{ name }}--></button>
+            <button type="button" class="btn btn-danger dropdown-toggle btnNodeDrop" id="nodeButtonDropdown{{ nodeID }}"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+            <li class="disabled"><a class="disabled" href="http://admin:esp8266@{{ ip }}/" id="nodeButtonConfigLink{{ nodeID }}" target="nodeframe"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> View Config Page</a></li>
+            <li class="disabled"><a class="disabled" href="http://admin:esp8266@{{ ip }}/findme" id="nodeButtonFindMeLink{{ nodeID }}" target="nodeframe"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Find Me</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Disable</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="disabled" data-toggle="modal" data-target="#shutdownModal" data-name="{{ name }}" data-nodeid="{{ nodeID }}"><a class="disabled" href="#" id="nodeButtonShutdownLink{{ nodeID }}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Shutdown</a></li>
+          </ul>
+        </div>
+      </div>
+    </script>
+
+    <script id="nodeDetailModalTemplate" type="x-handlebars-template">
+      <!-- Modals -->
+      <div class="modal fade nodeDetailModal" id="nodeDetailModal{{ nodeID }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">{{ nodeID }} - {{ name }}</h4>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Status</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalStatus{{ nodeID }}">
+                      {{#if online}}Online{{else}}Offline{{/if}} - {{#if enabled}}Enabled{{else}}Disabled{{/if}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Colour</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalColour{{ nodeID }}">
+                      #{{ colour }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">IP Address</h3>
+                    </div>
+                    <div class="panel-body">
+                      <a target="_blank" id="nodeDetailModalStatusIP{{ nodeID }}" href="http://{{ ip }}">
+                        &nbsp;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Mac Address</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalStatusMac{{ nodeID }}">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Current Voltage</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalStatusCurrentVoltage{{ nodeID }}">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Lowest Voltage</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalStatusLowestVoltage{{ nodeID }}">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Hardware Ver'</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalStatusHardwareVersion{{ nodeID }}">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Software Ver'</h3>
+                    </div>
+                    <div class="panel-body" id="nodeDetailModalStatusSoftwareVersion{{ nodeID }}">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Voltage Graph</h3>
+                    </div>
+                    <div class="panel-body" style="padding-bottom:0px">
+                      <canvas id="nodeDetailModalStatusVoltageChart{{ nodeID }}"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/handlebars.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        //Diry tab selection code, FIXME
+        $('.nav-tabs li').on('click', function(){
+          $('.nav-tabs li.active').removeClass('active');
+          $(this).addClass('active');
+          
+          var contentToShow = $(this).attr('rel');
+          $('.content.active').hide().removeClass('active');
+          $('#'+contentToShow).show().addClass('active');
+        });
+      });
+
+      $('#shutdownModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var name = button.data('name'); // Extract info from data-* attributes
+        var id = button.data('nodeid'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-body').html("Are you sure you want to shutdown: " + name + "<br/>A manual restart will be required.");
+        $('#modalShutdownBTN').attr('href', "http://admin:esp8266@" + $('#nodeDetailModalStatusIP' + id).text().trim() + "/shutdown");
+      })
+
+      function setURL(url){
+        document.getElementById('nodeframe').src = url;
+      }
+    </script>
+
+    <script src="/js/Chart.bundle.js"></script>
+    <script src="/js/mobile-detect.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.0/jquery.timeago.js" type="text/javascript"></script>
-	<script>
-	  var socket = io();
+    <!-- <script src="/jquery-1.11.1.js"></script> -->
+    <script>
+      var socket = io();
 
-		socket.on('chat message', function(msg){
-			var id = msg.mac.replace(/:/g, '-');
-			console.info("Got a message with id '%s': %o", id, msg);
-			var li = $('#' + id);
-			if (!li.length) {
-				li = $('<li>', { id: id }).appendTo('#messages');
-			}
-			var text = msg.mac + " - " + msg.ip + " - Voltage:" + msg.voltage + " - Seconds since heartbeat: <span class=\"timeCount\">0</span>";
-			li.html(text);
-			li.removeClass("greyText");
-		});
+      window.charts = new Array();
 
-		window.setInterval( function(){ 
-	    // Do something after 1 second 
-	    $('.timeCount').each(function( index ) {
-	    	var secs = parseInt($(this).html());
+      socket.on('connect', function(){
+        // We have connected over the socket, clear the page and request a full refresh
+        socket.emit('syncRequest');
+      });
 
-	    	if(secs < 99){
-		    	$(this).html(parseInt($(this).html(), 10)+1);
-		    	if(secs == 30){
-		    		$(this).parent().addClass("greyText");
-		    	}
-		    }
-		    else{
-		    	$(this).parent().remove();
-		    }
-	  	});
-	  }  , 1000 );
+      var md = new MobileDetect(window.navigator.userAgent);
+      if(md.is('iPad') == true){
+        // var chartHeight = $(window).height() - 1000;
+        var chartHeight = 85;
+      }
+      else{
+        var chartHeight = $(window).height() - 660;
+      }
 
-	</script>
+      socket.on('syncResponce', function(nodes){
+        clearPage();
+
+        for (var property in nodes) {
+          if(nodes.hasOwnProperty(property)){
+            nodes[property].name = property;
+            console.info(nodes[property]);
+            if(nodes[property].nodeID < 10) {
+              nodes[property].nodeID = "0" + nodes[property].nodeID;
+            }
+            var li = $('#nodeButton' + nodes[property].nodeID);
+            if (!li.length) {
+              // Button doesn't exist, make button and modal
+              var nodeButtonTemplate = Handlebars.compile ($("#nodeButtonTemplate").html());  
+              $('#nodeButtons').append(nodeButtonTemplate(nodes[property]));
+              var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
+              $('#nodeModals').append(nodeDetailModalTemplate(nodes[property]));
+              $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
+              var ctx = $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID);
+              window.charts[nodes[property].nodeID] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: [],
+                  datasets: [{
+                    data: [],
+                    fill: false,
+                    pointRadius: 0,
+                    borderWidth: 1,
+                    borderColor: "rgba(255,0,0,0.6)"
+                  },{
+                    data: [],
+                    fill: false,
+                    pointRadius: 0,
+                    borderColor: "rgba(0,0,255,0.3)"
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  legend: {
+                    display: false,
+                  },
+                  hover: {
+                    mode: 'single'
+                  },
+                  tooltips:{
+                    enabled: false
+                  },
+                  scales: {
+                    xAxes: [{
+                      display: false,
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                      }
+                    }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                        display: false,
+                        labelString: 'Voltage'
+                      },
+                      ticks: {
+                        max: 1000,
+                        min: 675,
+                        stepSize: 25
+                      }
+                    }]
+                  }
+                }
+              });
+            }
+          }
+          charts[nodes[property].nodeID].data.labels = nodes[property].current_voltage_data;
+          charts[nodes[property].nodeID].data.datasets[0].data = nodes[property].current_voltage_data;
+          charts[nodes[property].nodeID].data.datasets[1].data = nodes[property].lowest_voltage_data;
+          charts[nodes[property].nodeID].update(0);
+        }
+      });
+
+      function clearPage(){
+        $('.nodeDetailModal').modal('hide');
+        $('.nodeButton').remove();
+        //$('.nodeDetailModal').remove();
+      }
+
+      socket.on('beat', function(msg){
+        var id = msg.mac.replace(/:/g, '-');
+        console.info("Got a message with id '%s': %o", id, msg);
+
+        if(msg.nodeID < 10){
+          msg.nodeID = "0" + msg.nodeID;
+        }
+
+        var li = $('#nodeButton' + msg.nodeID);
+        if (li.length) {
+          // Button exists, update button and modal
+          $('#nodeButtonConfigLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/').removeClass('disabled').parent().removeClass('disabled');
+          $('#nodeButtonFindMeLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/findme').removeClass('disabled').parent().removeClass('disabled');
+          $('#nodeButtonShutdownLink' + msg.nodeID).attr('data-address', 'http://admin:esp8266@' + msg.ip + '/shutdown').removeClass('disabled').parent().removeClass('disabled');
+          $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
+          $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
+        }
+
+        var liModal = $('#nodeDetailModal' + msg.nodeID);
+        if (!liModal.length){
+          // Modal doesn't exist, make it
+          var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
+          $('#nodeModals').append(nodeDetailModalTemplate(msg));
+        }
+        else {
+          // Modal exists, update it
+          $('#nodeDetailModalColour' + msg.nodeID).text("#" + msg.colour);
+          $('#nodeDetailModalStatusIP' + msg.nodeID).text(msg.ip).attr("href", "http://" + msg.ip);
+          $('#nodeDetailModalStatusMac' + msg.nodeID).text(msg.mac);
+          $('#nodeDetailModalStatusCurrentVoltage' + msg.nodeID).text(msg.current_voltage);
+          $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).text(msg.lowest_voltage);
+          $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).text(msg.hw_version);
+          $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).text(msg.sw_version);
+          if(msg.online == true){
+            var statusPrint = "Online - ";
+          }
+          else{
+            var statusPrint = "Offline - ";
+          }
+
+          if(msg.enabled == true){
+            statusPrint += "Enabled";
+          }
+          else{
+            statusPrint += "Disabled";
+          }
+          $('#nodeDetailModalStatus' + msg.nodeID).text(statusPrint);
+          charts[msg.nodeID].data.labels.push(msg.current_voltage);
+          charts[msg.nodeID].data.datasets[0].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.current_voltage;
+          charts[msg.nodeID].data.datasets[1].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.lowest_voltage;
+          charts[msg.nodeID].update(0);
+        }
+      });
+    </script>
   </body>
-</html>
+  </html>
