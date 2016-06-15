@@ -19,6 +19,20 @@ var nodeIDs = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
+app.get('/nodes.json', function(req, res){
+  res.type('application/json');
+
+  console.info(nodeIDs.length);
+  var jsonNodes = {};
+  for (var property in nodeIDs) {
+    if(nodeIDs.hasOwnProperty(property)){
+      jsonNodes[nodeIDs[property].nodeID] = {"battery" : nodeIDs[property].battery, "online" : nodeIDs[property].online, "enabled" : nodeIDs[property].enabled, "colour" : nodeIDs[property].colour};
+    }
+  }
+
+  res.send(JSON.stringify(jsonNodes, null, 2));
+});
+
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('disconnect', function(){
@@ -45,8 +59,11 @@ udp.on('message', function (message, remote) {
     var messageJSON = safelyParseJSON(message.toString());
 
     if(messageJSON != undefined){
-	    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
-	      // console.log(messageJSON);
+	    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.max_voltage != undefined) && (messageJSON.min_voltage != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
+
+        // Add voltage percent to nodes
+        nodeIDs[messageJSON.name].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
+
 	      // Add code to emit io message
         messageJSON.nodeID = nodeIDs[messageJSON.name].nodeID;
         messageJSON.colour = nodeIDs[messageJSON.name].colour;
@@ -60,7 +77,6 @@ udp.on('message', function (message, remote) {
           nodeIDs[messageJSON.name].lowest_voltage_data.shift();
         }
 	      io.emit('beat', messageJSON);
-	      //io.emit('heartbeat', messageJSON);
 	    }
 	}
 
