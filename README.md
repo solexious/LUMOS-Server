@@ -54,6 +54,8 @@ Example:
 }
 ```
 ## Install
+You will need a current version of nodejs and nodemon installed.
+
 Install dependencies using `npm install`
 
 ## Run
