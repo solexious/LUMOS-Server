@@ -49,3 +49,8 @@ Example:
   ]
 }
 ```
+## Install
+Install dependencies using `npm install`
+
+## Run
+Recomended to run with `nodemon`
