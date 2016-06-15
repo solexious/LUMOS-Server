@@ -13,9 +13,9 @@
   "author": "Charles Yarnold",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/solexious/lumos/issues"
+    "url": "https://github.com/solexious/LUMOS-Server/issues"
   },
-  "homepage": "https://github.com/solexious/lumos#readme",
+  "homepage": "https://github.com/solexious/LUMOS-Server#readme",
   "dependencies": {
     "express": "^4.13.4",
     "socket.io": "^1.4.4"
