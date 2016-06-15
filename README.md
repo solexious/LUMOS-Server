@@ -1,5 +1,7 @@
 # lumos
 ## Communication
+All urls accessed via port 3000
+
 ### Get node info
 To obtain a JSON file of all configured nodes, GET /nodes
 
@@ -28,6 +30,8 @@ Example:
 
 ### Set node colour
 To set node colours, PUT a JSON file to /nodes
+
+You can update the colour of as many or few nodes and in any order you wish.
 
 Example:
 ```
