@@ -115,7 +115,7 @@
       <script id="nodeButtonTemplate" type="x-handlebars-template">
         <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 text-center nodeButton" id="nodeButton{{ nodeID }}">
           <div class="btn-group btn-pad">
-            <button type="button" class="btn btn-danger btnNode" id="nodeButtonMain{{ nodeID }}" data-toggle="modal" data-target="#nodeDetailModal{{ nodeID }}"><span class="glyphicon glyphicon-stop" aria-hidden="true" style="font-size: 13px; color: #{{ colour }};"></span> {{ nodeID }}<!-- - {{ name }}--></button>
+            <button type="button" class="btn btn-danger btnNode" id="nodeButtonMain{{ nodeID }}" data-toggle="modal" data-target="#nodeDetailModal{{ nodeID }}" data-nodeid="{{ nodeID }}"><span class="glyphicon glyphicon-stop" aria-hidden="true" style="font-size: 13px; color: #{{ colour }};"></span> {{ nodeID }}<!-- - {{ name }}--></button>
             <button type="button" class="btn btn-danger dropdown-toggle btnNodeDrop" id="nodeButtonDropdown{{ nodeID }}"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
               <span class="sr-only">Toggle Dropdown</span>
@@ -259,17 +259,6 @@
         });
       });
 
-      $('#shutdownModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var name = button.data('name'); // Extract info from data-* attributes
-        var id = button.data('nodeid'); // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        modal.find('.modal-body').html("Are you sure you want to shutdown: " + name + "<br/>A manual restart will be required.");
-        $('#modalShutdownBTN').attr('href', "http://admin:esp8266@" + $('#nodeDetailModalStatusIP' + id).text().trim() + "/shutdown");
-      })
-
       function setURL(url){
         document.getElementById('nodeframe').src = url;
       }
@@ -283,6 +272,20 @@
       var socket = io();
 
       window.charts = new Array();
+      var chartData = new Array();
+      chartData.current_voltage_data = new Array();
+      chartData.lowest_voltage_data = new Array();
+
+      $('#shutdownModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var name = button.data('name'); // Extract info from data-* attributes
+        var id = button.data('nodeid'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-body').html("Are you sure you want to shutdown: " + name + "<br/>A manual restart will be required.");
+        $('#modalShutdownBTN').attr('href', "http://admin:esp8266@" + $('#nodeDetailModalStatusIP' + id).text().trim() + "/shutdown");
+      });
 
       socket.on('connect', function(){
         // We have connected over the socket, clear the page and request a full refresh
@@ -303,7 +306,6 @@
 
         for (var property in nodes) {
           if(nodes.hasOwnProperty(property)){
-            nodes[property].name = property;
             console.info(nodes[property]);
             if(nodes[property].nodeID < 10) {
               nodes[property].nodeID = "0" + nodes[property].nodeID;
@@ -316,64 +318,81 @@
               var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
               $('#nodeModals').append(nodeDetailModalTemplate(nodes[property]));
               $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
-              var ctx = $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID);
-              window.charts[nodes[property].nodeID] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                  labels: [],
-                  datasets: [{
-                    data: [],
-                    fill: false,
-                    pointRadius: 0,
-                    borderWidth: 1,
-                    borderColor: "rgba(255,0,0,0.6)"
-                  },{
-                    data: [],
-                    fill: false,
-                    pointRadius: 0,
-                    borderColor: "rgba(0,0,255,0.3)"
-                  }]
-                },
-                options: {
-                  responsive: true,
-                  legend: {
-                    display: false,
-                  },
-                  hover: {
-                    mode: 'single'
-                  },
-                  tooltips:{
-                    enabled: false
-                  },
-                  scales: {
-                    xAxes: [{
-                      display: false,
-                      scaleLabel: {
-                        display: true,
-                        labelString: 'Time'
-                      }
-                    }],
-                    yAxes: [{
-                      display: true,
-                      scaleLabel: {
+              chartData.current_voltage_data[nodes[property].nodeID] = nodes[property].current_voltage_data;
+              chartData.lowest_voltage_data[nodes[property].nodeID] = nodes[property].lowest_voltage_data;
+
+              // Trigger shown.bs.modal if on safari or ipad, show.bs.modal if not
+              if(md.is('iPad') || (!!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/))){
+                var trigger = "shown.bs.modal";
+              }
+              else{
+                var trigger = "show.bs.modal";
+              }
+
+              $('#nodeDetailModal' + nodes[property].nodeID).on(trigger, function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var id = button.data('nodeid'); // Extract info from data-* attributes
+
+                // Generate graph if not created
+                if(charts[id] == undefined){
+                  var ctx = $("#nodeDetailModalStatusVoltageChart" + id);
+                  console.info(ctx);
+                  window.charts[id] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: chartData.current_voltage_data[id],
+                      datasets: [{
+                        data: chartData.current_voltage_data[id],
+                        fill: false,
+                        pointRadius: 0,
+                        borderWidth: 1,
+                        borderColor: "rgba(255,0,0,0.6)"
+                      },{
+                        data: chartData.lowest_voltage_data[id],
+                        fill: false,
+                        pointRadius: 0,
+                        borderColor: "rgba(0,0,255,0.3)"
+                      }]
+                    },
+                    options: {
+                      animation : false,
+                      responsive: true,
+                      legend: {
                         display: false,
-                        labelString: 'Voltage'
                       },
-                      ticks: {
-                        max: 1000,
-                        min: 675,
-                        stepSize: 25
+                      hover: {
+                        mode: 'single'
+                      },
+                      tooltips:{
+                        enabled: false
+                      },
+                      scales: {
+                        xAxes: [{
+                          display: false,
+                          scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                          }
+                        }],
+                        yAxes: [{
+                          display: true,
+                          scaleLabel: {
+                            display: false,
+                            labelString: 'Voltage'
+                          },
+                          ticks: {
+                            max: 1000,
+                            min: 675,
+                            stepSize: 25
+                          }
+                        }]
                       }
-                    }]
-                  }
+                    }
+                  });
                 }
               });
             }
           }
-          charts[nodes[property].nodeID].data.labels = nodes[property].current_voltage_data;
-          charts[nodes[property].nodeID].data.datasets[0].data = nodes[property].current_voltage_data;
-          charts[nodes[property].nodeID].data.datasets[1].data = nodes[property].lowest_voltage_data;
-          charts[nodes[property].nodeID].update(0);
         }
       });
 
@@ -430,10 +449,18 @@
             statusPrint += "Disabled";
           }
           $('#nodeDetailModalStatus' + msg.nodeID).text(statusPrint);
-          charts[msg.nodeID].data.labels.push(msg.current_voltage);
-          charts[msg.nodeID].data.datasets[0].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.current_voltage;
-          charts[msg.nodeID].data.datasets[1].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.lowest_voltage;
-          charts[msg.nodeID].update(0);
+          if(charts[msg.nodeID] == undefined){
+            // Chart doesn't exist, add it to buffer for when it is created
+            chartData.current_voltage_data[msg.nodeID].push(msg.current_voltage);
+            chartData.lowest_voltage_data[msg.nodeID].push(msg.lowest_voltage);
+          }
+          else{
+            // Chart exists, add data directly to the cart and update
+            charts[msg.nodeID].data.labels.push(msg.current_voltage);
+            charts[msg.nodeID].data.datasets[0].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.current_voltage;
+            charts[msg.nodeID].data.datasets[1].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.lowest_voltage;
+            charts[msg.nodeID].update(0);
+          }
         }
       });
     </script>
