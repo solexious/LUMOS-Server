@@ -1,7 +1,7 @@
 # lumos
 ## Communication
 ### Get node info
-To obtain a JSON file of all configured nodes, GET /nodes.json
+To obtain a JSON file of all configured nodes, GET /nodes
 
 Example: 
 ```
@@ -27,7 +27,7 @@ Example:
 ```
 
 ### Set node colour
-To set node colours, PUT a JSON file to /setnodes
+To set node colours, PUT a JSON file to /nodes
 
 Example:
 ```
