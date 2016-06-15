@@ -24,13 +24,15 @@ app.get('/nodes.json', function(req, res){
 
   console.info(nodeIDs.length);
   var jsonNodes = {};
+  jsonNodes.nodes = [];
   for (var property in nodeIDs) {
     if(nodeIDs.hasOwnProperty(property)){
-      jsonNodes[nodeIDs[property].nodeID] = {"battery" : nodeIDs[property].battery, "online" : nodeIDs[property].online, "enabled" : nodeIDs[property].enabled, "colour" : nodeIDs[property].colour};
+      jsonNodes.nodes.push({"nodeID" : nodeIDs[property].nodeID, "battery" : nodeIDs[property].battery, "online" : nodeIDs[property].online, "enabled" : nodeIDs[property].enabled, "colour" : nodeIDs[property].colour});
     }
   }
 
   res.send(JSON.stringify(jsonNodes, null, 2));
+  // res.send(jsonNodes);
 });
 
 io.on('connection', function(socket){
@@ -54,17 +56,23 @@ udp.on('listening', function () {
 });
 
 udp.on('message', function (message, remote) {
-	console.log(`got:${message}`);
+  console.log(`got:${message}`);
 
     var messageJSON = safelyParseJSON(message.toString());
 
     if(messageJSON != undefined){
-	    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.max_voltage != undefined) && (messageJSON.min_voltage != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
+      if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.max_voltage != undefined) && (messageJSON.min_voltage != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
 
         // Add voltage percent to nodes
         nodeIDs[messageJSON.name].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
+        if(nodeIDs[messageJSON.name].battery < 0){
+          nodeIDs[messageJSON.name].battery = 0;
+        }
+        else if(nodeIDs[messageJSON.name].battery > 100){
+          nodeIDs[messageJSON.name].battery = 100;
+        }
 
-	      // Add code to emit io message
+        // Add code to emit io message
         messageJSON.nodeID = nodeIDs[messageJSON.name].nodeID;
         messageJSON.colour = nodeIDs[messageJSON.name].colour;
         messageJSON.enabled = nodeIDs[messageJSON.name].enabled;
