@@ -25,6 +25,7 @@ var artnetInstances = [];
   for (var property in nodes) {
     if(nodes.hasOwnProperty(property)){
       artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000});
+      artnetInstances[nodes[property].nodeID].set([0,0,0]);
     }
   }
 })();
@@ -65,7 +66,9 @@ app.route('/nodes')
                   // It exists! Update the colour
                   nodes[req.body.nodes[i].nodeID].colour = req.body.nodes[i].colour;
                   responce.nodes.push({"nodeID":req.body.nodes[i].nodeID,"result":"success"});
-                  artnetInstances[req.body.nodes[i].nodeID].set([parseInt(req.body.nodes[i].colour[0] + req.body.nodes[i].colour[1], 16),parseInt(req.body.nodes[i].colour[2] + req.body.nodes[i].colour[3], 16),parseInt(req.body.nodes[i].colour[4] + req.body.nodes[i].colour[5], 16)]);
+                  if(nodes[req.body.nodes[i].nodeID].enabled == true){
+                    artnetInstances[req.body.nodes[i].nodeID].set([parseInt(req.body.nodes[i].colour[0] + req.body.nodes[i].colour[1], 16),parseInt(req.body.nodes[i].colour[2] + req.body.nodes[i].colour[3], 16),parseInt(req.body.nodes[i].colour[4] + req.body.nodes[i].colour[5], 16)]);
+                  }
                 }
                 else{
                   responce.nodes.push({"nodeID":req.body.nodes[i].nodeID,"result":"nodeID not found"});
