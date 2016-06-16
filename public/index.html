@@ -57,6 +57,10 @@
           padding-right: 5px;
           padding-left: 5px;
         }
+
+        .text-muted {
+          color: #CCC;
+        }
       </style>
     </head>
     <body>
@@ -428,13 +432,13 @@
         }
         else {
           // Modal exists, update it
-          $('#nodeDetailModalColour' + msg.nodeID).text("#" + msg.colour);
-          $('#nodeDetailModalStatusIP' + msg.nodeID).text(msg.ip).attr("href", "http://" + msg.ip);
-          $('#nodeDetailModalStatusMac' + msg.nodeID).text(msg.mac);
-          $('#nodeDetailModalStatusCurrentVoltage' + msg.nodeID).text(msg.current_voltage);
-          $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).text(msg.lowest_voltage);
-          $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).text(msg.hw_version);
-          $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).text(msg.sw_version);
+          $('#nodeDetailModalColour' + msg.nodeID).text("#" + msg.colour).removeClass("text-muted");
+          $('#nodeDetailModalStatusIP' + msg.nodeID).text(msg.ip).attr("href", "http://" + msg.ip).removeClass("text-muted");
+          $('#nodeDetailModalStatusMac' + msg.nodeID).text(msg.mac).removeClass("text-muted");
+          $('#nodeDetailModalStatusCurrentVoltage' + msg.nodeID).text(msg.current_voltage).removeClass("text-muted");
+          $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).text(msg.lowest_voltage).removeClass("text-muted");
+          $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).text(msg.hw_version).removeClass("text-muted");
+          $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).text(msg.sw_version).removeClass("text-muted");
           if(msg.online == true){
             var statusPrint = "Online - ";
           }
@@ -477,12 +481,12 @@
           $('#nodeButtonFindMeLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
           $('#nodeButtonShutdownLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled').attr('data-target', '');
           $('#nodeDetailModalStatus' + msg.nodeID).text($('#nodeDetailModalStatus' + msg.nodeID).text().replace("Online", "Offline"));
-          $('#nodeDetailModalStatusIP' + msg.nodeID).html("&nbsp;");
-          $('#nodeDetailModalStatusMac' + msg.nodeID).html("&nbsp;");
-          $('#nodeDetailModalStatusCurrentVoltage' + msg.nodeID).html("&nbsp;");
-          $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).html("&nbsp;");
-          $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).html("&nbsp;");
-          $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).html("&nbsp;");
+          $('#nodeDetailModalStatusIP' + msg.nodeID).addClass("text-muted");
+          $('#nodeDetailModalStatusMac' + msg.nodeID).addClass("text-muted");
+          $('#nodeDetailModalStatusCurrentVoltage' + msg.nodeID).addClass("text-muted");
+          $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).addClass("text-muted");
+          $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).addClass("text-muted");
+          $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).addClass("text-muted");
         }
       });
 
