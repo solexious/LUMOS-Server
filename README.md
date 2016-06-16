@@ -36,7 +36,7 @@ You can update the colour of as many or few nodes and in any order you wish.
 Example:
 ```
 {
-  nodes : [
+  "nodes" : [
     {
       "nodeID" : "1",
       "colour" : "00F431"
