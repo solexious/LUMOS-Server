@@ -125,7 +125,7 @@
             <li class="disabled"><a class="disabled" href="http://admin:esp8266@{{ ip }}/findme" id="nodeButtonFindMeLink{{ nodeID }}" target="nodeframe"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Find Me</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Disable</a></li>
             <li role="separator" class="divider"></li>
-            <li class="disabled" data-toggle="modal" data-target="#shutdownModal" data-name="{{ name }}" data-nodeid="{{ nodeID }}"><a class="disabled" href="#" id="nodeButtonShutdownLink{{ nodeID }}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Shutdown</a></li>
+            <li class="disabled" data-toggle="modal" data-target="" data-name="{{ name }}" data-nodeid="{{ nodeID }}"><a class="disabled" href="#" id="nodeButtonShutdownLink{{ nodeID }}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Shutdown</a></li>
           </ul>
         </div>
       </div>
@@ -414,7 +414,7 @@
           // Button exists, update button and modal
           $('#nodeButtonConfigLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/').removeClass('disabled').parent().removeClass('disabled');
           $('#nodeButtonFindMeLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/findme').removeClass('disabled').parent().removeClass('disabled');
-          $('#nodeButtonShutdownLink' + msg.nodeID).attr('data-address', 'http://admin:esp8266@' + msg.ip + '/shutdown').removeClass('disabled').parent().removeClass('disabled');
+          $('#nodeButtonShutdownLink' + msg.nodeID).attr('data-address', 'http://admin:esp8266@' + msg.ip + '/shutdown').removeClass('disabled').parent().removeClass('disabled').attr('data-target', '#shutdownModal');
           $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
           $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
           $('#nodeButtonIcon' + msg.nodeID).css('color', '#' + msg.colour);
@@ -475,7 +475,7 @@
           $('#nodeButtonDropdown' + msg.nodeID).addClass('btn-danger').removeClass('btn-success');
           $('#nodeButtonConfigLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
           $('#nodeButtonFindMeLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
-          $('#nodeButtonShutdownLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
+          $('#nodeButtonShutdownLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled').attr('data-target', '');
           $('#nodeDetailModalStatus' + msg.nodeID).text($('#nodeDetailModalStatus' + msg.nodeID).text().replace("Online", "Offline"));
           $('#nodeDetailModalStatusIP' + msg.nodeID).html("&nbsp;");
           $('#nodeDetailModalStatusMac' + msg.nodeID).html("&nbsp;");
