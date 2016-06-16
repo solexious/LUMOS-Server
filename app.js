@@ -50,8 +50,6 @@ app.route('/nodes')
             // Do we have a colour?
             if(req.body.nodes[i].colour != undefined){
               // Is it a valid colour?
-              console.info(typeof req.body.nodes[i].colour);
-              console.info(req.body.nodes[i].colour);
               if(req.body.nodes[i].colour.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
                 // We got totally valid data, now check we have that node
                 if(nodes[req.body.nodes[i].nodeID] != undefined){
