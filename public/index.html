@@ -419,9 +419,15 @@
           $('#nodeButtonConfigLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/').removeClass('disabled').parent().removeClass('disabled');
           $('#nodeButtonFindMeLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/findme').removeClass('disabled').parent().removeClass('disabled');
           $('#nodeButtonShutdownLink' + msg.nodeID).attr('data-address', 'http://admin:esp8266@' + msg.ip + '/shutdown').removeClass('disabled').parent().removeClass('disabled').attr('data-target', '#shutdownModal');
-          $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
-          $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
           $('#nodeButtonIcon' + msg.nodeID).css('color', '#' + msg.colour);
+          if(msg.enabled == true){
+            $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
+            $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
+          }
+          else{
+            $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-warning');
+            $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-warning');
+          }
         }
 
         var liModal = $('#nodeDetailModal' + msg.nodeID);
@@ -475,8 +481,8 @@
         }
         if(msg.online == false){
           // Offline, find relevent settings and update them
-          $('#nodeButtonMain' + msg.nodeID).addClass('btn-danger').removeClass('btn-success');
-          $('#nodeButtonDropdown' + msg.nodeID).addClass('btn-danger').removeClass('btn-success');
+          $('#nodeButtonMain' + msg.nodeID).addClass('btn-danger').removeClass('btn-success').removeClass('btn-warning');
+          $('#nodeButtonDropdown' + msg.nodeID).addClass('btn-danger').removeClass('btn-success').removeClass('btn-warning');
           $('#nodeButtonConfigLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
           $('#nodeButtonFindMeLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
           $('#nodeButtonShutdownLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled').attr('data-target', '');
