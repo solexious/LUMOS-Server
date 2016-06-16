@@ -38,15 +38,15 @@ Example:
 {
   "nodes" : [
     {
-      "nodeID" : "1",
+      "nodeID" : 1,
       "colour" : "00F431"
     },
     {
-      "nodeID" : "2",
+      "nodeID" : 2,
       "colour" : "00F431"
     },
     {
-      "nodeID" : "6",
+      "nodeID" : 6,
       "colour" : "00F431"
     },
     ...
