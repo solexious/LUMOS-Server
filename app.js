@@ -149,7 +149,7 @@ udp.on('message', function (message, remote) {
 
 function setOffline(nodeID) {
   console.info("offline");
-  nodes[name].online = false;
+  nodes[nodeID].online = false;
   io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
 }
 
