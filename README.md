@@ -53,6 +53,34 @@ Example:
   ]
 }
 ```
+Response:
+```
+{
+  "nodes": [
+    {
+      "nodeID": 1,
+      "result": "success"
+    },
+    {
+      "nodeID": 2,
+      "result": "success"
+    },
+    {
+      "nodeID": 6,
+      "result": "success"
+    },
+    ...
+  ]
+}
+```
+Possible results:
+* `success` - colour saved successfully
+* `nodeID not found` - could not find a node with given ID
+* `invalid colour` - colour given wasn't a 6 character hex colour
+* `missing colour` - a colour wasn't provided
+* `invalid nodeID` - nodeID wasn't a valid integer
+* `missing nodeID` - a nodeID wasn't provided
+
 ## Install
 You will need a current version of nodejs and nodemon installed.
 
