@@ -154,6 +154,16 @@ function setOffline(nodeID) {
   io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
 }
 
+(function() {
+  var timeout = setInterval(function(){
+    var output = {nodes:[]};
+    for(var i = 0; i < Object.keys(nodes).length; i++){
+      output.nodes.push({"nodeID":nodes[i+1].nodeID,"colour":nodes[i+1].colour});
+    }
+    io.emit('colours', output);
+  }, 1000);
+})();
+
 udp.bind(UDP_PORT, UDP_HOST);
 
 // Helper functions

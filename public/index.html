@@ -115,7 +115,7 @@
       <script id="nodeButtonTemplate" type="x-handlebars-template">
         <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 text-center nodeButton" id="nodeButton{{ nodeID }}">
           <div class="btn-group btn-pad">
-            <button type="button" class="btn btn-danger btnNode" id="nodeButtonMain{{ nodeID }}" data-toggle="modal" data-target="#nodeDetailModal{{ nodeID }}" data-nodeid="{{ nodeID }}"><span class="glyphicon glyphicon-stop" aria-hidden="true" style="font-size: 13px; color: #{{ colour }};"></span> {{ nodeID }}<!-- - {{ name }}--></button>
+            <button type="button" class="btn btn-danger btnNode" id="nodeButtonMain{{ nodeID }}" data-toggle="modal" data-target="#nodeDetailModal{{ nodeID }}" data-nodeid="{{ nodeID }}"><span class="glyphicon glyphicon-stop" id="nodeButtonIcon{{ nodeID }}" aria-hidden="true" style="font-size: 13px; color: #{{ colour }};"></span> {{ nodeID }}<!-- - {{ name }}--></button>
             <button type="button" class="btn btn-danger dropdown-toggle btnNodeDrop" id="nodeButtonDropdown{{ nodeID }}"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
               <span class="sr-only">Toggle Dropdown</span>
@@ -417,6 +417,7 @@
           $('#nodeButtonShutdownLink' + msg.nodeID).attr('data-address', 'http://admin:esp8266@' + msg.ip + '/shutdown').removeClass('disabled').parent().removeClass('disabled');
           $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
           $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
+          $('#nodeButtonIcon' + msg.nodeID).css('color', '#' + msg.colour);
         }
 
         var liModal = $('#nodeDetailModal' + msg.nodeID);
@@ -482,6 +483,13 @@
           $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).html("&nbsp;");
           $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).html("&nbsp;");
           $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).html("&nbsp;");
+        }
+      });
+
+      socket.on('colours', function(msg){
+        for(var i = 0; i < msg.nodes.length; i++){
+          $('#nodeButtonIcon' + msg.nodes[i].nodeID).css('color', '#' + msg.nodes[i].colour);
+          $('#nodeDetailModalColour' + msg.nodes[i].nodeID).text("#" + msg.nodes[i].colour);
         }
       });
     </script>
