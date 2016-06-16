@@ -16,6 +16,7 @@ var UDP_HOST = '0.0.0.0';
 server.listen(3000);
 
 var nodeIDs = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
+var timeouts = [];
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
@@ -84,11 +85,23 @@ udp.on('message', function (message, remote) {
         if(nodeIDs[messageJSON.name].lowest_voltage_data.push(messageJSON.lowest_voltage) > 6500){
           nodeIDs[messageJSON.name].lowest_voltage_data.shift();
         }
+
+        // Start timer to make offline
+        if(timeouts[messageJSON.nodeID] != undefined){
+          clearTimeout(timeouts[messageJSON.nodeID]);
+        }
+        timeouts[messageJSON.nodeID] = setTimeout(function() { setOffline(messageJSON.name) }, 25000);
+
 	      io.emit('beat', messageJSON);
 	    }
 	}
-
 });
+
+function setOffline(name) {
+  console.info("offline");
+  nodeIDs[name].online = false;
+  io.emit('online-status', {"nodeID":nodeIDs[name].nodeID,"online":nodeIDs[name].online});
+}
 
 udp.bind(UDP_PORT, UDP_HOST);
 

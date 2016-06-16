@@ -336,7 +336,6 @@
                 // Generate graph if not created
                 if(charts[id] == undefined){
                   var ctx = $("#nodeDetailModalStatusVoltageChart" + id);
-                  console.info(ctx);
                   window.charts[id] = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -461,6 +460,28 @@
             charts[msg.nodeID].data.datasets[1].data[charts[msg.nodeID].data.datasets[1].data.length] = msg.lowest_voltage;
             charts[msg.nodeID].update(0);
           }
+        }
+      });
+
+      socket.on('online-status', function(msg){
+        console.info(msg);
+        if(msg.nodeID < 10){
+          msg.nodeID = "0" + msg.nodeID;
+        }
+        if(msg.online == false){
+          // Offline, find relevent settings and update them
+          $('#nodeButtonMain' + msg.nodeID).addClass('btn-danger').removeClass('btn-success');
+          $('#nodeButtonDropdown' + msg.nodeID).addClass('btn-danger').removeClass('btn-success');
+          $('#nodeButtonConfigLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
+          $('#nodeButtonFindMeLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
+          $('#nodeButtonShutdownLink' + msg.nodeID).addClass('disabled').parent().addClass('disabled');
+          $('#nodeDetailModalStatus' + msg.nodeID).text($('#nodeDetailModalStatus' + msg.nodeID).text().replace("Online", "Offline"));
+          $('#nodeDetailModalStatusIP' + msg.nodeID).html("&nbsp;");
+          $('#nodeDetailModalStatusMac' + msg.nodeID).html("&nbsp;");
+          $('#nodeDetailModalStatusCurrentVoltage' + msg.nodeID).html("&nbsp;");
+          $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).html("&nbsp;");
+          $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).html("&nbsp;");
+          $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).html("&nbsp;");
         }
       });
     </script>
