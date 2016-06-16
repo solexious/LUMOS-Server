@@ -5,6 +5,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
 var bodyParser = require('body-parser');
+var Artnet = require('artnet');
 
 var dgram = require('dgram');
 var udp = dgram.createSocket('udp4');
@@ -18,6 +19,15 @@ server.listen(3000);
 var nodes = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
 var nodeIDs = safelyParseJSON(fs.readFileSync('nodeIDs.json', 'utf8'));
 var timeouts = [];
+var artnetInstances = [];
+
+(function(){
+  for (var property in nodes) {
+    if(nodes.hasOwnProperty(property)){
+      artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000});
+    }
+  }
+})();
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
@@ -26,7 +36,6 @@ app.route('/nodes')
   .get(function(req, res, next){
     res.type('application/json');
 
-    console.info(nodes.length);
     var jsonNodes = {};
     jsonNodes.nodes = [];
     for (var property in nodes) {
@@ -56,6 +65,7 @@ app.route('/nodes')
                   // It exists! Update the colour
                   nodes[req.body.nodes[i].nodeID].colour = req.body.nodes[i].colour;
                   responce.nodes.push({"nodeID":req.body.nodes[i].nodeID,"result":"success"});
+                  artnetInstances[req.body.nodes[i].nodeID].set([parseInt(req.body.nodes[i].colour[0] + req.body.nodes[i].colour[1], 16),parseInt(req.body.nodes[i].colour[2] + req.body.nodes[i].colour[3], 16),parseInt(req.body.nodes[i].colour[4] + req.body.nodes[i].colour[5], 16)]);
                 }
                 else{
                   responce.nodes.push({"nodeID":req.body.nodes[i].nodeID,"result":"nodeID not found"});
@@ -133,6 +143,9 @@ udp.on('message', function (message, remote) {
         if(nodes[nodeID].lowest_voltage_data.push(messageJSON.lowest_voltage) > 6500){
           nodes[nodeID].lowest_voltage_data.shift();
         }
+
+        // Set ip for artnet
+        artnetInstances[nodeID].setHost(messageJSON.ip);
 
         // Start timer to make offline
         if(timeouts[nodeID] != undefined){
