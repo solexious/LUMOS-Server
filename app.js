@@ -40,7 +40,6 @@ app.route('/nodes')
   .put(function(req, res, next){
     // Itterate over array of nodes and set colours in main array
     var responce = {"nodes" : []};
-    // var responce["nodes"] = new Array();
 
     if(req.body.nodes != undefined){
       for(var i = 0; i < req.body.nodes.length; i++){
