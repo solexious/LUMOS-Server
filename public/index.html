@@ -488,6 +488,9 @@
 
       socket.on('colours', function(msg){
         for(var i = 0; i < msg.nodes.length; i++){
+          if(msg.nodes[i].nodeID < 10){
+            msg.nodes[i].nodeID = "0" + msg.nodes[i].nodeID;
+          }
           $('#nodeButtonIcon' + msg.nodes[i].nodeID).css('color', '#' + msg.nodes[i].colour);
           $('#nodeDetailModalColour' + msg.nodes[i].nodeID).text("#" + msg.nodes[i].colour);
         }
