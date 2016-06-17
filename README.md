@@ -101,7 +101,7 @@ A smaller packer size version is avalible, this should be sent to port 3002. Thi
 The format is as follows (MessagePack removes white space by default):
 ```
 {
-  "nodes" : [
+  "ns" : [
     {
       "n" : 1,
       "c" : "00F431"
