@@ -1,6 +1,6 @@
 # lumos
 ## Install
-You will need a current version of nodejs and nodemon installed.
+You will need a current version of nodejs, npm and nodemon installed.
 
 Install dependencies using `npm install`
 
