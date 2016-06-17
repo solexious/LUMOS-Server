@@ -8,11 +8,17 @@ var bodyParser = require('body-parser');
 var Artnet = require('artnet');
 
 var dgram = require('dgram');
-var udp = dgram.createSocket('udp4');
+var udpBeat = dgram.createSocket('udp4');
+var udpSetColourLong = dgram.createSocket('udp4');
+var udpSetColourShort = dgram.createSocket('udp4');
 
 
-var UDP_PORT = 33333;
-var UDP_HOST = '0.0.0.0';
+var UDP_BEAT_PORT = 33333;
+var UDP_BEAT_HOST = '0.0.0.0';
+var UDP_COLOUR_LONG_PORT = 3001;
+var UDP_COLOUR_LONG_HOST = '0.0.0.0';
+var UDP_COLOUR_SHORT_PORT = 3002;
+var UDP_COLOUR_SHORT_HOST = '0.0.0.0';
 
 server.listen(3000);
 
@@ -109,56 +115,97 @@ io.on('connection', function(socket){
 
 
 // UDP functions
-udp.on('listening', function () {
-    var address = udp.address();
-    console.log('UDP Server listening on ' + address.address + ":" + address.port);
+udpBeat.on('listening', function () {
+    var address = udpBeat.address();
+    console.log('UDP Beat Server listening on ' + address.address + ":" + address.port);
 });
 
-udp.on('message', function (message, remote) {
-  console.log(`got:${message}`);
+udpSetColourLong.on('listening', function () {
+    var address = udpBeat.address();
+    console.log('UDP Colour Set Long Server listening on ' + address.address + ":" + address.port);
+});
 
-    var messageJSON = safelyParseJSON(message.toString());
+udpSetColourShort.on('listening', function () {
+    var address = udpBeat.address();
+    console.log('UDP Colour Set Short Server listening on ' + address.address + ":" + address.port);
+});
 
-    if(messageJSON != undefined){
-      if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.max_voltage != undefined) && (messageJSON.min_voltage != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
+udpBeat.on('message', function (message, remote) {
+  console.log(`got beat:${message}`);
 
-        // Get node id
-        var nodeID = nodeIDs[messageJSON.name];
+  var messageJSON = safelyParseJSON(message.toString());
 
-        // Add voltage percent to nodes
-        nodes[nodeID].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
-        if(nodes[nodeID].battery < 0){
-          nodes[nodeID].battery = 0;
-        }
-        else if(nodes[nodeID].battery > 100){
-          nodes[nodeID].battery = 100;
-        }
+  if(messageJSON != undefined){
+    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.max_voltage != undefined) && (messageJSON.min_voltage != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
 
-        // Add code to emit io message
-        messageJSON.nodeID = nodes[nodeID].nodeID;
-        messageJSON.colour = nodes[nodeID].colour;
-        messageJSON.enabled = nodes[nodeID].enabled;
-        nodes[nodeID].online = true;
-        messageJSON.online = nodes[nodeID].online;
-        if(nodes[nodeID].current_voltage_data.push(messageJSON.current_voltage) > 6500){
-          nodes[nodeID].current_voltage_data.shift();
-        }
-        if(nodes[nodeID].lowest_voltage_data.push(messageJSON.lowest_voltage) > 6500){
-          nodes[nodeID].lowest_voltage_data.shift();
-        }
+      // Get node id
+      var nodeID = nodeIDs[messageJSON.name];
 
-        // Set ip for artnet
-        artnetInstances[nodeID].setHost(messageJSON.ip);
+      // Add voltage percent to nodes
+      nodes[nodeID].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
+      if(nodes[nodeID].battery < 0){
+        nodes[nodeID].battery = 0;
+      }
+      else if(nodes[nodeID].battery > 100){
+        nodes[nodeID].battery = 100;
+      }
 
-        // Start timer to make offline
-        if(timeouts[nodeID] != undefined){
-          clearTimeout(timeouts[nodeID]);
-        }
-        timeouts[nodeID] = setTimeout(function() { setOffline(nodeID) }, 25000);
+      // Add code to emit io message
+      messageJSON.nodeID = nodes[nodeID].nodeID;
+      messageJSON.colour = nodes[nodeID].colour;
+      messageJSON.enabled = nodes[nodeID].enabled;
+      nodes[nodeID].online = true;
+      messageJSON.online = nodes[nodeID].online;
+      if(nodes[nodeID].current_voltage_data.push(messageJSON.current_voltage) > 6500){
+        nodes[nodeID].current_voltage_data.shift();
+      }
+      if(nodes[nodeID].lowest_voltage_data.push(messageJSON.lowest_voltage) > 6500){
+        nodes[nodeID].lowest_voltage_data.shift();
+      }
 
-	      io.emit('beat', messageJSON);
-	    }
+      // Set ip for artnet
+      artnetInstances[nodeID].setHost(messageJSON.ip);
+
+      // Start timer to make offline
+      if(timeouts[nodeID] != undefined){
+        clearTimeout(timeouts[nodeID]);
+      }
+      timeouts[nodeID] = setTimeout(function() { setOffline(nodeID) }, 25000);
+
+      io.emit('beat', messageJSON);
+    }
 	}
+});
+
+udpSetColourLong.on('message', function (message, remote) {
+  console.log(`got colour long:${message}`);
+
+  var messageJSON = safelyParseJSON(message.toString());
+
+  if(messageJSON.nodes != undefined){
+    for(var i = 0; i < messageJSON.nodes.length; i++){
+      // Do we have an id?
+      if(messageJSON.nodes[i].nodeID != undefined){
+        // Is it a number?
+        if(typeof messageJSON.nodes[i].nodeID == "number"){
+          // Do we have a colour?
+          if(messageJSON.nodes[i].colour != undefined){
+            // Is it a valid colour?
+            if(messageJSON.nodes[i].colour.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
+              // We got totally valid data, now check we have that node
+              if(nodes[messageJSON.nodes[i].nodeID] != undefined){
+                // It exists! Update the colour
+                nodes[messageJSON.nodes[i].nodeID].colour = messageJSON.nodes[i].colour;
+                if(nodes[messageJSON.nodes[i].nodeID].enabled == true){
+                  artnetInstances[messageJSON.nodes[i].nodeID].set([parseInt(messageJSON.nodes[i].colour[0] + messageJSON.nodes[i].colour[1], 16),parseInt(messageJSON.nodes[i].colour[2] + messageJSON.nodes[i].colour[3], 16),parseInt(messageJSON.nodes[i].colour[4] + messageJSON.nodes[i].colour[5], 16)]);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 });
 
 function setOffline(nodeID) {
@@ -177,7 +224,9 @@ function setOffline(nodeID) {
   }, 1000);
 })();
 
-udp.bind(UDP_PORT, UDP_HOST);
+udpBeat.bind(UDP_BEAT_PORT, UDP_BEAT_HOST);
+udpSetColourLong.bind(UDP_COLOUR_LONG_PORT, UDP_COLOUR_LONG_HOST);
+udpSetColourShort.bind(UDP_COLOUR_SHORT_PORT, UDP_COLOUR_SHORT_HOST);
 
 // Helper functions
 function safelyParseJSON (json) {
