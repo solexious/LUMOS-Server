@@ -20,6 +20,7 @@
     "artnet": "git+https://github.com/solexious/artnet.git",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "msgpack-lite": "^0.1.20",
     "socket.io": "^1.4.4"
   }
 }

@@ -7,7 +7,7 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var Artnet = require('artnet');
 
-var msgpack = require('msgpack5')();
+var msgpack = require("msgpack-lite");
 
 var dgram = require('dgram');
 var udpBeat = dgram.createSocket('udp4');
@@ -200,6 +200,39 @@ udpSetColourLong.on('message', function (message, remote) {
                 nodes[messageJSON.nodes[i].nodeID].colour = messageJSON.nodes[i].colour;
                 if(nodes[messageJSON.nodes[i].nodeID].enabled == true){
                   artnetInstances[messageJSON.nodes[i].nodeID].set([parseInt(messageJSON.nodes[i].colour[0] + messageJSON.nodes[i].colour[1], 16),parseInt(messageJSON.nodes[i].colour[2] + messageJSON.nodes[i].colour[3], 16),parseInt(messageJSON.nodes[i].colour[4] + messageJSON.nodes[i].colour[5], 16)]);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+
+udpSetColourShort.on('message', function (message, remote) {
+  console.log(`got colour short`);
+
+  //console.info(message);
+  var decodedmsg = msgpack.decode(message);
+  var messageJSON = decodedmsg;
+
+  if(messageJSON.ns != undefined){
+    for(var i = 0; i < messageJSON.ns.length; i++){
+      // Do we have an id?
+      if(messageJSON.ns[i].n != undefined){
+        // Is it a number?
+        if(typeof messageJSON.ns[i].n == "number"){
+          // Do we have a colour?
+          if(messageJSON.ns[i].c != undefined){
+            // Is it a valid colour?
+            if(messageJSON.ns[i].c.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
+              // We got totally valid data, now check we have that node
+              if(nodes[messageJSON.ns[i].n] != undefined){
+                // It exists! Update the colour
+                nodes[messageJSON.ns[i].n].colour = messageJSON.ns[i].c;
+                if(nodes[messageJSON.ns[i].n].enabled == true){
+                  artnetInstances[messageJSON.ns[i].n].set([parseInt(messageJSON.ns[i].c[0] + messageJSON.ns[i].c[1], 16),parseInt(messageJSON.ns[i].c[2] + messageJSON.ns[i].c[3], 16),parseInt(messageJSON.ns[i].c[4] + messageJSON.ns[i].c[5], 16)]);
                 }
               }
             }
