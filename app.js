@@ -7,6 +7,8 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var Artnet = require('artnet');
 
+var msgpack = require('msgpack5')();
+
 var dgram = require('dgram');
 var udpBeat = dgram.createSocket('udp4');
 var udpSetColourLong = dgram.createSocket('udp4');
@@ -121,12 +123,12 @@ udpBeat.on('listening', function () {
 });
 
 udpSetColourLong.on('listening', function () {
-    var address = udpBeat.address();
+    var address = udpSetColourLong.address();
     console.log('UDP Colour Set Long Server listening on ' + address.address + ":" + address.port);
 });
 
 udpSetColourShort.on('listening', function () {
-    var address = udpBeat.address();
+    var address = udpSetColourShort.address();
     console.log('UDP Colour Set Short Server listening on ' + address.address + ":" + address.port);
 });
 
