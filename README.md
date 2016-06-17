@@ -1,9 +1,16 @@
 # lumos
-## Communication
-All urls accessed via port 3000
+## Install
+You will need a current version of nodejs and nodemon installed.
 
+Install dependencies using `npm install`
+
+## Run
+Recomended to run with `nodemon`
+
+## Communication
 ### Get node info
-To obtain a JSON file of all configured nodes, GET /nodes
+#### HTTP
+To obtain a JSON file of all configured nodes, GET /nodes on port 3000.
 
 Example: 
 ```
@@ -29,7 +36,8 @@ Example:
 ```
 
 ### Set node colour
-To set node colours, PUT a JSON file to /nodes
+#### HTTP
+To set node colours, PUT a JSON file to /nodes on port 3000.
 
 You can update the colour of as many or few nodes and in any order you wish.
 
@@ -74,17 +82,40 @@ Response:
 }
 ```
 Possible results:
-* `success` - colour saved successfully
-* `nodeID not found` - could not find a node with given ID
-* `invalid colour` - colour given wasn't a 6 character hex colour
-* `missing colour` - a colour wasn't provided
-* `invalid nodeID` - nodeID wasn't a valid integer
-* `missing nodeID` - a nodeID wasn't provided
+* `success` - colour saved successfully.
+* `nodeID not found` - could not find a node with given ID.
+* `invalid nodeID` - nodeID wasn't a valid integer.
+* `missing nodeID` - a nodeID wasn't provided.
+* `invalid colour` - colour given wasn't a 6 character hex colour.
+* `missing colour` - a colour wasn't provided.
 
-## Install
-You will need a current version of nodejs and nodemon installed.
+#### UDP Packet
+##### Full text JSON
+The format of the JSON is the same as a normall HTTP call, but all white space should be removed to minimise the packet size.
 
-Install dependencies using `npm install`
+UDP packets should be sent to port 3001, no response is given.
 
-## Run
-Recomended to run with `nodemon`
+#### MessagePack JSON
+A smaller packer size version is avalible, this should be sent to port 3002. This utilizes MessagePack data serialisation, libraries for this can be found at: [http://msgpack.org](http://msgpack.org)
+
+The format is as follows (MessagePack removes white space by default):
+```
+{
+  "nodes" : [
+    {
+      "n" : 1,
+      "c" : "00F431"
+    },
+    {
+      "n" : 2,
+      "c" : "00F431"
+    },
+    {
+      "n" : 6,
+      "c" : "00F431"
+    },
+    ...
+  ]
+}
+```
+No response is given to UDP Packets.
