@@ -213,9 +213,7 @@ udpSetColourLong.on('message', function (message, remote) {
 udpSetColourShort.on('message', function (message, remote) {
   console.log(`got colour short`);
 
-  //console.info(message);
-  var decodedmsg = msgpack.decode(message);
-  var messageJSON = decodedmsg;
+  var messageJSON = msgpack.decode(message);
 
   if(messageJSON.ns != undefined){
     for(var i = 0; i < messageJSON.ns.length; i++){
