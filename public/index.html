@@ -80,7 +80,7 @@
             </div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="height: 100%">
-            <iframe src="" name="nodeframe" seamless="seamless" width="100%" style="height: calc(100vh - 70px)"></iframe>
+            <iframe src="about:blank" name="nodeframe" seamless="seamless" width="100%" style="height: calc(100vh - 70px)"></iframe>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@
               <h4 class="modal-title">Shutdown Node</h4>
             </div>
             <div class="modal-body">
-              <p></p>
+              <p>&nbsp;</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -272,13 +272,13 @@
     <script src="/js/mobile-detect.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <!-- <script src="/jquery-1.11.1.js"></script> -->
-    <script>
+    <script type="text/javascript">
       var socket = io();
 
-      window.charts = new Array();
-      var chartData = new Array();
-      chartData.current_voltage_data = new Array();
-      chartData.lowest_voltage_data = new Array();
+      window.charts = [];
+      var chartData = [];
+      chartData.current_voltage_data = [];
+      chartData.lowest_voltage_data = [];
 
       $('#shutdownModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
@@ -286,7 +286,7 @@
         var id = button.data('nodeid'); // Extract info from data-* attributes
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
+        var modal = $(this);
         modal.find('.modal-body').html("Are you sure you want to shutdown: " + name + "<br/>A manual restart will be required.");
         $('#modalShutdownBTN').attr('href', "http://admin:esp8266@" + $('#nodeDetailModalStatusIP' + id).text().trim() + "/shutdown");
       });
@@ -297,7 +297,7 @@
       });
 
       var md = new MobileDetect(window.navigator.userAgent);
-      if(md.is('iPad') == true){
+      if(md.is('iPad') === true){
         // var chartHeight = $(window).height() - 1000;
         var chartHeight = 85;
       }
@@ -318,16 +318,16 @@
             var li = $('#nodeButton' + nodes[property].nodeID);
             if (!li.length) {
               // Button doesn't exist, make button and modal
-              var nodeButtonTemplate = Handlebars.compile ($("#nodeButtonTemplate").html());  
+              var nodeButtonTemplate = Handlebars.compile ($("#nodeButtonTemplate").html());
               $('#nodeButtons').append(nodeButtonTemplate(nodes[property]));
-              var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
+              var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());
               $('#nodeModals').append(nodeDetailModalTemplate(nodes[property]));
               // $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
               chartData.current_voltage_data[nodes[property].nodeID] = nodes[property].current_voltage_data;
               chartData.lowest_voltage_data[nodes[property].nodeID] = nodes[property].lowest_voltage_data;
 
               // Remove graph if created
-              if(charts[nodes[property].nodeID] != undefined){
+              if(charts[nodes[property].nodeID] !== undefined){
                 $("nodeDetailModalStatusVoltageChartPanel" + nodes[property].nodeID).empty().append('<canvas id="nodeDetailModalStatusVoltageChart' + nodes[property].nodeID + '"></canvas>');
                 console.info($("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID));
                 // $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
@@ -335,11 +335,12 @@
               }
 
               // Trigger shown.bs.modal if on safari or ipad, show.bs.modal if not
+              var trigger;
               if(md.is('iPad') || (!!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/))){
-                var trigger = "shown.bs.modal";
+                trigger = "shown.bs.modal";
               }
               else{
-                var trigger = "show.bs.modal";
+                trigger = "show.bs.modal";
               }
 
               $('#nodeDetailModal' + nodes[property].nodeID).on(trigger, function (event) {
@@ -347,7 +348,7 @@
                 var id = button.data('nodeid'); // Extract info from data-* attributes
 
                 // Generate graph if not created
-                if(charts[id] == undefined){
+                if(charts[id] === undefined){
                   var ctx = $("#nodeDetailModalStatusVoltageChart" + id);
                   window.charts[id] = new Chart(ctx, {
                     type: 'line',
@@ -429,7 +430,7 @@
           $('#nodeButtonFindMeLink' + msg.nodeID).attr('href', 'http://admin:esp8266@' + msg.ip + '/findme').removeClass('disabled').parent().removeClass('disabled');
           $('#nodeButtonShutdownLink' + msg.nodeID).attr('data-address', 'http://admin:esp8266@' + msg.ip + '/shutdown').removeClass('disabled').parent().removeClass('disabled').attr('data-target', '#shutdownModal');
           $('#nodeButtonIcon' + msg.nodeID).css('color', '#' + msg.colour);
-          if(msg.enabled == true){
+          if(msg.enabled === true){
             $('#nodeButtonMain' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
             $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-danger').addClass('btn-success');
           }
@@ -442,7 +443,7 @@
         var liModal = $('#nodeDetailModal' + msg.nodeID);
         if (!liModal.length){
           // Modal doesn't exist, make it
-          var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
+          var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());
           $('#nodeModals').append(nodeDetailModalTemplate(msg));
         }
         else {
@@ -454,21 +455,22 @@
           $('#nodeDetailModalStatusLowestVoltage' + msg.nodeID).text(msg.lowest_voltage).removeClass("text-muted");
           $('#nodeDetailModalStatusHardwareVersion' + msg.nodeID).text(msg.hw_version).removeClass("text-muted");
           $('#nodeDetailModalStatusSoftwareVersion' + msg.nodeID).text(msg.sw_version).removeClass("text-muted");
-          if(msg.online == true){
-            var statusPrint = "Online - ";
+          var statusPrint;
+          if(msg.online === true){
+            statusPrint = "Online - ";
           }
           else{
-            var statusPrint = "Offline - ";
+            statusPrint = "Offline - ";
           }
 
-          if(msg.enabled == true){
+          if(msg.enabled === true){
             statusPrint += "Enabled";
           }
           else{
             statusPrint += "Disabled";
           }
           $('#nodeDetailModalStatus' + msg.nodeID).text(statusPrint);
-          if(charts[msg.nodeID] == undefined){
+          if(charts[msg.nodeID] === undefined){
             // Chart doesn't exist, add it to buffer for when it is created
             chartData.current_voltage_data[msg.nodeID].push(msg.current_voltage);
             chartData.lowest_voltage_data[msg.nodeID].push(msg.lowest_voltage);
@@ -488,7 +490,7 @@
         if(msg.nodeID < 10){
           msg.nodeID = "0" + msg.nodeID;
         }
-        if(msg.online == false){
+        if(msg.online === false){
           // Offline, find relevent settings and update them
           $('#nodeButtonMain' + msg.nodeID).addClass('btn-danger').removeClass('btn-success').removeClass('btn-warning');
           $('#nodeButtonDropdown' + msg.nodeID).addClass('btn-danger').removeClass('btn-success').removeClass('btn-warning');
