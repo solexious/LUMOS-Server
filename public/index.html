@@ -94,6 +94,7 @@
         </div>
       </div>
 
+      <!-- Node Info Modals -->
       <div id="nodeModals">
       </div>
 
@@ -136,7 +137,6 @@
     </script>
 
     <script id="nodeDetailModalTemplate" type="x-handlebars-template">
-      <!-- Modals -->
       <div class="modal fade nodeDetailModal" id="nodeDetailModal{{ nodeID }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -233,7 +233,7 @@
                     <div class="panel-heading">
                       <h3 class="panel-title">Voltage Graph</h3>
                     </div>
-                    <div class="panel-body" style="padding-bottom:0px">
+                    <div class="panel-body" style="padding-bottom:0px" id="nodeDetailModalStatusVoltageChartPanel{{ nodeID }}">
                       <canvas id="nodeDetailModalStatusVoltageChart{{ nodeID }}"></canvas>
                     </div>
                   </div>
@@ -304,6 +304,7 @@
       else{
         var chartHeight = $(window).height() - 660;
       }
+      console.info(chartHeight);
 
       socket.on('syncResponce', function(nodes){
         clearPage();
@@ -321,9 +322,18 @@
               $('#nodeButtons').append(nodeButtonTemplate(nodes[property]));
               var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
               $('#nodeModals').append(nodeDetailModalTemplate(nodes[property]));
-              $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
+              //$("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
               chartData.current_voltage_data[nodes[property].nodeID] = nodes[property].current_voltage_data;
               chartData.lowest_voltage_data[nodes[property].nodeID] = nodes[property].lowest_voltage_data;
+
+              // Remove graph if created
+              if(charts[nodes[property].nodeID] != undefined){
+                // $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).remove();
+                $("nodeDetailModalStatusVoltageChartPanel" + nodes[property].nodeID).empty().append('<canvas id="nodeDetailModalStatusVoltageChart' + nodes[property].nodeID + '"></canvas>');
+                console.info($("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID));
+                //$("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
+                charts[nodes[property].nodeID] = undefined;
+              }
 
               // Trigger shown.bs.modal if on safari or ipad, show.bs.modal if not
               if(md.is('iPad') || (!!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/))){
