@@ -322,16 +322,15 @@
               $('#nodeButtons').append(nodeButtonTemplate(nodes[property]));
               var nodeDetailModalTemplate = Handlebars.compile ($("#nodeDetailModalTemplate").html());  
               $('#nodeModals').append(nodeDetailModalTemplate(nodes[property]));
-              //$("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
+              // $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
               chartData.current_voltage_data[nodes[property].nodeID] = nodes[property].current_voltage_data;
               chartData.lowest_voltage_data[nodes[property].nodeID] = nodes[property].lowest_voltage_data;
 
               // Remove graph if created
               if(charts[nodes[property].nodeID] != undefined){
-                // $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).remove();
                 $("nodeDetailModalStatusVoltageChartPanel" + nodes[property].nodeID).empty().append('<canvas id="nodeDetailModalStatusVoltageChart' + nodes[property].nodeID + '"></canvas>');
                 console.info($("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID));
-                //$("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
+                // $("#nodeDetailModalStatusVoltageChart" + nodes[property].nodeID).attr({height:chartHeight});
                 charts[nodes[property].nodeID] = undefined;
               }
 
