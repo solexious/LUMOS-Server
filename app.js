@@ -32,7 +32,7 @@ var artnetInstances = [];
 (function(){
   for (var property in nodes) {
     if(nodes.hasOwnProperty(property)){
-      artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000,minPacketLength:3});
+      artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000,minPackageLength:3});
       artnetInstances[nodes[property].nodeID].set([0,0,0]);
     }
   }
