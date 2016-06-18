@@ -133,7 +133,7 @@ udpSetColourShort.on('listening', function () {
 });
 
 udpBeat.on('message', function (message, remote) {
-  console.log('got beat:${message}');
+  console.log('got beat: ' + message);
 
   var messageJSON = safelyParseJSON(message.toString());
 
