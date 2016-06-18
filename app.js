@@ -158,6 +158,15 @@ udpBeat.on('message', function (message, remote) {
       messageJSON.enabled = nodes[nodeID].enabled;
       nodes[nodeID].online = true;
       messageJSON.online = nodes[nodeID].online;
+
+      // Save data to array for initial loading of page
+      nodes[nodeID].ip = messageJSON.ip;
+      nodes[nodeID].current_voltage = messageJSON.current_voltage;
+      nodes[nodeID].lowest_voltage = messageJSON.lowest_voltage;
+      nodes[nodeID].mac = messageJSON.mac;
+      nodes[nodeID].sw_version = messageJSON.sw_version;
+      nodes[nodeID].hw_version = messageJSON.hw_version;
+
       if(nodes[nodeID].current_voltage_data.push(messageJSON.current_voltage) > 6500){
         nodes[nodeID].current_voltage_data.shift();
       }
@@ -180,7 +189,7 @@ udpBeat.on('message', function (message, remote) {
 });
 
 udpSetColourLong.on('message', function (message, remote) {
-  console.log(`got colour long:${message}`);
+  //console.log(`got colour long:${message}`);
 
   var messageJSON = safelyParseJSON(message.toString());
 
@@ -211,7 +220,7 @@ udpSetColourLong.on('message', function (message, remote) {
 });
 
 udpSetColourShort.on('message', function (message, remote) {
-  console.log(`got colour short`);
+  //console.log(`got colour short`);
 
   var messageJSON = msgpack.decode(message);
 
