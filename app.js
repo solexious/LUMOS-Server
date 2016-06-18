@@ -59,22 +59,22 @@ app.route('/nodes')
     // Itterate over array of nodes and set colours in main array
     var responce = {"nodes" : []};
 
-    if(req.body.nodes != undefined){
+    if(req.body.nodes !== undefined){
       for(var i = 0; i < req.body.nodes.length; i++){
         // Do we have an id?
-        if(req.body.nodes[i].nodeID != undefined){
+        if(req.body.nodes[i].nodeID !== undefined){
           // Is it a number?
           if(typeof req.body.nodes[i].nodeID == "number"){
             // Do we have a colour?
-            if(req.body.nodes[i].colour != undefined){
+            if(req.body.nodes[i].colour !== undefined){
               // Is it a valid colour?
               if(req.body.nodes[i].colour.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
                 // We got totally valid data, now check we have that node
-                if(nodes[req.body.nodes[i].nodeID] != undefined){
+                if(nodes[req.body.nodes[i].nodeID] !== undefined){
                   // It exists! Update the colour
                   nodes[req.body.nodes[i].nodeID].colour = req.body.nodes[i].colour;
                   responce.nodes.push({"nodeID":req.body.nodes[i].nodeID,"result":"success"});
-                  if(nodes[req.body.nodes[i].nodeID].enabled == true){
+                  if(nodes[req.body.nodes[i].nodeID].enabled === true){
                     artnetInstances[req.body.nodes[i].nodeID].set([parseInt(req.body.nodes[i].colour[0] + req.body.nodes[i].colour[1], 16),parseInt(req.body.nodes[i].colour[2] + req.body.nodes[i].colour[3], 16),parseInt(req.body.nodes[i].colour[4] + req.body.nodes[i].colour[5], 16)]);
                   }
                 }
@@ -133,12 +133,12 @@ udpSetColourShort.on('listening', function () {
 });
 
 udpBeat.on('message', function (message, remote) {
-  console.log(`got beat:${message}`);
+  console.log('got beat:${message}');
 
   var messageJSON = safelyParseJSON(message.toString());
 
-  if(messageJSON != undefined){
-    if ((messageJSON.mac != undefined) && (messageJSON.ip != undefined) && (messageJSON.max_voltage != undefined) && (messageJSON.min_voltage != undefined) && (messageJSON.current_voltage != undefined) && (messageJSON.lowest_voltage != undefined) && (messageJSON.name != undefined) && (messageJSON.output_enabled != undefined)){
+  if(messageJSON !== undefined){
+    if ((messageJSON.mac !== undefined) && (messageJSON.ip !== undefined) && (messageJSON.max_voltage !== undefined) && (messageJSON.min_voltage !== undefined) && (messageJSON.current_voltage !== undefined) && (messageJSON.lowest_voltage !== undefined) && (messageJSON.name !== undefined) && (messageJSON.output_enabled !== undefined)){
 
       // Get node id
       var nodeID = nodeIDs[messageJSON.name];
@@ -178,10 +178,10 @@ udpBeat.on('message', function (message, remote) {
       artnetInstances[nodeID].setHost(messageJSON.ip);
 
       // Start timer to make offline
-      if(timeouts[nodeID] != undefined){
+      if(timeouts[nodeID] !== undefined){
         clearTimeout(timeouts[nodeID]);
       }
-      timeouts[nodeID] = setTimeout(function() { setOffline(nodeID) }, 25000);
+      timeouts[nodeID] = setTimeout(function() { setOffline(nodeID); }, 25000);
 
       io.emit('beat', messageJSON);
     }
@@ -193,21 +193,21 @@ udpSetColourLong.on('message', function (message, remote) {
 
   var messageJSON = safelyParseJSON(message.toString());
 
-  if(messageJSON.nodes != undefined){
+  if(messageJSON.nodes !== undefined){
     for(var i = 0; i < messageJSON.nodes.length; i++){
       // Do we have an id?
-      if(messageJSON.nodes[i].nodeID != undefined){
+      if(messageJSON.nodes[i].nodeID !== undefined){
         // Is it a number?
         if(typeof messageJSON.nodes[i].nodeID == "number"){
           // Do we have a colour?
-          if(messageJSON.nodes[i].colour != undefined){
+          if(messageJSON.nodes[i].colour !== undefined){
             // Is it a valid colour?
             if(messageJSON.nodes[i].colour.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
               // We got totally valid data, now check we have that node
-              if(nodes[messageJSON.nodes[i].nodeID] != undefined){
+              if(nodes[messageJSON.nodes[i].nodeID] !== undefined){
                 // It exists! Update the colour
                 nodes[messageJSON.nodes[i].nodeID].colour = messageJSON.nodes[i].colour;
-                if(nodes[messageJSON.nodes[i].nodeID].enabled == true){
+                if(nodes[messageJSON.nodes[i].nodeID].enabled === true){
                   artnetInstances[messageJSON.nodes[i].nodeID].set([parseInt(messageJSON.nodes[i].colour[0] + messageJSON.nodes[i].colour[1], 16),parseInt(messageJSON.nodes[i].colour[2] + messageJSON.nodes[i].colour[3], 16),parseInt(messageJSON.nodes[i].colour[4] + messageJSON.nodes[i].colour[5], 16)]);
                 }
               }
@@ -224,21 +224,21 @@ udpSetColourShort.on('message', function (message, remote) {
 
   var messageJSON = msgpack.decode(message);
 
-  if(messageJSON.ns != undefined){
+  if(messageJSON.ns !== undefined){
     for(var i = 0; i < messageJSON.ns.length; i++){
       // Do we have an id?
-      if(messageJSON.ns[i].n != undefined){
+      if(messageJSON.ns[i].n !== undefined){
         // Is it a number?
         if(typeof messageJSON.ns[i].n == "number"){
           // Do we have a colour?
-          if(messageJSON.ns[i].c != undefined){
+          if(messageJSON.ns[i].c !== undefined){
             // Is it a valid colour?
             if(messageJSON.ns[i].c.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
               // We got totally valid data, now check we have that node
-              if(nodes[messageJSON.ns[i].n] != undefined){
+              if(nodes[messageJSON.ns[i].n] !== undefined){
                 // It exists! Update the colour
                 nodes[messageJSON.ns[i].n].colour = messageJSON.ns[i].c;
-                if(nodes[messageJSON.ns[i].n].enabled == true){
+                if(nodes[messageJSON.ns[i].n].enabled === true){
                   artnetInstances[messageJSON.ns[i].n].set([parseInt(messageJSON.ns[i].c[0] + messageJSON.ns[i].c[1], 16),parseInt(messageJSON.ns[i].c[2] + messageJSON.ns[i].c[3], 16),parseInt(messageJSON.ns[i].c[4] + messageJSON.ns[i].c[5], 16)]);
                 }
               }
@@ -279,7 +279,7 @@ function safelyParseJSON (json) {
 
   json = json.replace(/\0/g, '');
 
-  var parsed
+  var parsed;
 
   try {
     parsed = JSON.parse(json);
@@ -288,5 +288,5 @@ function safelyParseJSON (json) {
     console.log(e);
   }
 
-  return parsed;; // ould be undefined!
+  return parsed; // ould be undefined!
 }
