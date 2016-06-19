@@ -32,7 +32,7 @@ var artnetInstances = [];
 (function(){
   for (var property in nodes) {
     if(nodes.hasOwnProperty(property)){
-      artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000,minPackageLength:3,maxPackageLength:10});
+      artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000,minPackageLength:3,maxPackageLength:10,enabled:false});
       artnetInstances[nodes[property].nodeID].set([0,0,0]);
     }
   }
@@ -174,8 +174,9 @@ udpBeat.on('message', function (message, remote) {
         nodes[nodeID].lowest_voltage_data.shift();
       }
 
-      // Set ip for artnet
+      // Setup artnet
       artnetInstances[nodeID].setHost(messageJSON.ip);
+      artnetInstances[nodeID].enable();
 
       // Start timer to make offline
       if(timeouts[nodeID] !== undefined){
@@ -253,6 +254,7 @@ udpSetColourShort.on('message', function (message, remote) {
 function setOffline(nodeID) {
   // console.info("offline");
   nodes[nodeID].online = false;
+  artnetInstances[nodeID].disable();
   io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
 }
 
