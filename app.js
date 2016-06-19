@@ -103,14 +103,14 @@ app.route('/nodes')
   });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  // console.log('a user connected');
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    // console.log('user disconnected');
   });
 
   socket.on('syncRequest', function(msg){
     // Grab all entries and send them
-    console.log('syncRequest received');
+    // console.log('syncRequest received');
     socket.emit('syncResponce', nodes);
   });
 });
@@ -119,21 +119,21 @@ io.on('connection', function(socket){
 // UDP functions
 udpBeat.on('listening', function () {
     var address = udpBeat.address();
-    console.log('UDP Beat Server listening on ' + address.address + ":" + address.port);
+    // console.log('UDP Beat Server listening on ' + address.address + ":" + address.port);
 });
 
 udpSetColourLong.on('listening', function () {
     var address = udpSetColourLong.address();
-    console.log('UDP Colour Set Long Server listening on ' + address.address + ":" + address.port);
+    // console.log('UDP Colour Set Long Server listening on ' + address.address + ":" + address.port);
 });
 
 udpSetColourShort.on('listening', function () {
     var address = udpSetColourShort.address();
-    console.log('UDP Colour Set Short Server listening on ' + address.address + ":" + address.port);
+    // console.log('UDP Colour Set Short Server listening on ' + address.address + ":" + address.port);
 });
 
 udpBeat.on('message', function (message, remote) {
-  console.log('got beat: ' + message);
+  // console.log('got beat: ' + message);
 
   var messageJSON = safelyParseJSON(message.toString());
 
@@ -251,7 +251,7 @@ udpSetColourShort.on('message', function (message, remote) {
 });
 
 function setOffline(nodeID) {
-  console.info("offline");
+  // console.info("offline");
   nodes[nodeID].online = false;
   io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
 }
@@ -285,7 +285,7 @@ function safelyParseJSON (json) {
     parsed = JSON.parse(json);
   } catch (e) {
     // Oh well, but whatever...
-    console.log(e);
+    // console.log(e);
   }
 
   return parsed; // ould be undefined!
