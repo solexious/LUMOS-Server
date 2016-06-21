@@ -131,7 +131,10 @@ io.on('connection', function(socket){
         artnetInstances[msg.nodeID].enable();
       }
       else{
-        artnetInstances[msg.nodeID].disable();
+        artnetInstances[msg.nodeID].set([0,0,0]);
+        setTimeout(function (){
+          artnetInstances[msg.nodeID].disable();
+        }, 30);
       }
     }
     io.emit('enabled', msg);
