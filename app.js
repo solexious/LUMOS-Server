@@ -129,6 +129,7 @@ io.on('connection', function(socket){
       nodes[msg.nodeID].enabled = msg.enabled;
       if((nodes[msg.nodeID].enabled) && (nodes[msg.nodeID].online)){
         artnetInstances[msg.nodeID].enable();
+        artnetInstances[msg.nodeID].set([parseInt(nodes[msg.nodeID].colour[0] + nodes[msg.nodeID].colour[1], 16),parseInt(nodes[msg.nodeID].colour[2] + nodes[msg.nodeID].colour[3], 16),parseInt(nodes[msg.nodeID].colour[4] + nodes[msg.nodeID].colour[5], 16)]);
       }
       else{
         artnetInstances[msg.nodeID].set([0,0,0]);
