@@ -6,6 +6,7 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 var bodyParser = require('body-parser');
 var Artnet = require('artnet');
+var ping = require ("net-ping");
 
 var msgpack = require("msgpack-lite");
 
@@ -13,6 +14,14 @@ var dgram = require('dgram');
 var udpBeat = dgram.createSocket('udp4');
 var udpSetColourLong = dgram.createSocket('udp4');
 var udpSetColourShort = dgram.createSocket('udp4');
+
+var options = {
+    networkProtocol: ping.NetworkProtocol.IPv4,
+    retries: 0,
+    timeout: 2000,
+    ttl: 128
+};
+var pingSession = ping.createSession();
 
 
 var UDP_BEAT_PORT = 33333;
@@ -170,7 +179,6 @@ udpBeat.on('message', function (message, remote) {
       messageJSON.nodeID = nodes[nodeID].nodeID;
       messageJSON.colour = nodes[nodeID].colour;
       messageJSON.enabled = nodes[nodeID].enabled;
-      nodes[nodeID].online = true;
       messageJSON.online = nodes[nodeID].online;
 
       // Save data to array for initial loading of page
@@ -194,13 +202,25 @@ udpBeat.on('message', function (message, remote) {
         artnetInstances[nodeID].enable();
       }
 
-      // Start timer to make offline
-      if(timeouts[nodeID] !== undefined){
-        clearTimeout(timeouts[nodeID]);
-      }
-      timeouts[nodeID] = setTimeout(function() { setOffline(nodeID); }, 25000);
-
       io.emit('beat', messageJSON);
+
+      pingSession.pingHost(nodes[nodeID].ip, function (error, target){
+      if (error){
+        console.log(target + ": " + error.toString ());
+      }
+      else{
+        nodes[nodeID].online = true;
+        if(nodes[nodeID].enabled === true){
+          artnetInstances[nodeID].enable();
+        }
+        io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
+        // Start timer to make offline
+        if(timeouts[nodeID] !== undefined){
+          clearTimeout(timeouts[nodeID]);
+        }
+        timeouts[nodeID] = setTimeout(function() { setOffline(nodeID); }, 25000);
+      }
+      });
     }
 	}
 });
