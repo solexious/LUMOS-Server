@@ -113,6 +113,20 @@ io.on('connection', function(socket){
     // console.log('syncRequest received');
     socket.emit('syncResponce', nodes);
   });
+
+  socket.on('enabled', function(msg){
+    // Set node as enabled/disabled
+    if((msg.nodeID !== undefined) && (msg.enabled !== undefined)){
+      nodes[msg.nodeID].enabled = msg.enabled;
+      if((nodes[msg.nodeID].enabled) && (nodes[msg.nodeID].online)){
+        artnetInstances[msg.nodeID].enable();
+      }
+      else{
+        artnetInstances[msg.nodeID].disable();
+      }
+    }
+    io.emit('enabled', msg);
+  });
 });
 
 
@@ -176,7 +190,9 @@ udpBeat.on('message', function (message, remote) {
 
       // Setup artnet
       artnetInstances[nodeID].setHost(messageJSON.ip);
-      artnetInstances[nodeID].enable();
+      if((nodes[nodeID].online) && (nodes[nodeID.enabled])){
+        artnetInstances[nodeID].enable();
+      }
 
       // Start timer to make offline
       if(timeouts[nodeID] !== undefined){

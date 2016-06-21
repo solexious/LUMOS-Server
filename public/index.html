@@ -128,7 +128,7 @@
             <ul class="dropdown-menu">
             <li class="disabled"><a class="disabled" href="http://admin:esp8266@{{ ip }}/" id="nodeButtonConfigLink{{ nodeID }}" target="nodeframe"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> View Config Page</a></li>
             <li class="disabled"><a class="disabled" href="http://admin:esp8266@{{ ip }}/findme" id="nodeButtonFindMeLink{{ nodeID }}" target="nodeframe"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Find Me</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Disable</a></li>
+            <li id="nodeButtonEnabled{{ nodeID }}"><a href="#"><span class="glyphicon {{#if enabled}}glyphicon-remove{{else}}glyphicon-ok{{/if}}" aria-hidden="true"></span> {{#if enabled}}Disable{{else}}Enable{{/if}}</a></li>
             <li role="separator" class="divider"></li>
             <li class="disabled" data-toggle="modal" data-target="" data-name="{{ name }}" data-nodeid="{{ nodeID }}"><a class="disabled" href="#" id="nodeButtonShutdownLink{{ nodeID }}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Shutdown</a></li>
           </ul>
@@ -326,6 +326,16 @@
               chartData.current_voltage_data[nodes[property].nodeID] = nodes[property].current_voltage_data;
               chartData.lowest_voltage_data[nodes[property].nodeID] = nodes[property].lowest_voltage_data;
 
+              // Attach click handler
+              $("#nodeButtonEnabled" + nodes[property].nodeID).click(function() {
+                if($(this).text() == " Disable"){
+                  socket.emit('enabled', { nodeID : parseInt($(this).attr("id").replace(/\D/g,'')), enabled : false});
+                }
+                else{
+                  socket.emit('enabled', { nodeID : parseInt($(this).attr("id").replace(/\D/g,'')), enabled : true});
+                }
+              });
+
               // Remove graph if created
               if(charts[nodes[property].nodeID] !== undefined){
                 $("nodeDetailModalStatusVoltageChartPanel" + nodes[property].nodeID).empty().append('<canvas id="nodeDetailModalStatusVoltageChart' + nodes[property].nodeID + '"></canvas>');
@@ -514,6 +524,33 @@
           }
           $('#nodeButtonIcon' + msg.nodes[i].nodeID).css('color', '#' + msg.nodes[i].colour);
           $('#nodeDetailModalColour' + msg.nodes[i].nodeID).text("#" + msg.nodes[i].colour);
+        }
+      });
+
+      socket.on('enabled', function(msg){
+        // Check there is an id and status
+        if((msg.nodeID !== undefined) && (msg.enabled !== undefined)){
+          if(msg.nodeID < 10){
+            msg.nodeID = "0" + msg.nodeID;
+          }
+          if(msg.enabled === true){
+            $("#nodeButtonEnabled" + msg.nodeID).html("<a href=\"#\"><span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span> Disable</a>");
+            if($('#nodeButtonMain' + msg.nodeID).hasClass('btn-warning')){
+              // We were set to disabled, update button and modal
+              $('#nodeButtonMain' + msg.nodeID).removeClass('btn-warning').addClass('btn-success');
+              $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-warning').addClass('btn-success');
+              $('#nodeDetailModalStatus' + msg.nodeID).text($('#nodeDetailModalStatus' + msg.nodeID).text().replace("Disabled", "Enabled"));
+            }
+          }
+          else{
+            $("#nodeButtonEnabled" + msg.nodeID).html("<a href=\"#\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> Enable</a");
+            if($('#nodeButtonMain' + msg.nodeID).hasClass('btn-success')){
+              // We were set to disabled, update button and modal
+              $('#nodeButtonMain' + msg.nodeID).removeClass('btn-success').addClass('btn-warning');
+              $('#nodeButtonDropdown' + msg.nodeID).removeClass('btn-success').addClass('btn-warning');
+              $('#nodeDetailModalStatus' + msg.nodeID).text($('#nodeDetailModalStatus' + msg.nodeID).text().replace("Enabled", "Disabled"));
+            }
+          }
         }
       });
     </script>
