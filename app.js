@@ -127,6 +127,9 @@ io.on('connection', function(socket){
     // Set node as enabled/disabled
     if((msg.nodeID !== undefined) && (msg.enabled !== undefined)){
       nodes[msg.nodeID].enabled = msg.enabled;
+      var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
+      nodesToSave[msg.nodeID].enabled = msg.enabled;
+      fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
       if((nodes[msg.nodeID].enabled) && (nodes[msg.nodeID].online)){
         artnetInstances[msg.nodeID].enable();
         artnetInstances[msg.nodeID].set([parseInt(nodes[msg.nodeID].colour[0] + nodes[msg.nodeID].colour[1], 16),parseInt(nodes[msg.nodeID].colour[2] + nodes[msg.nodeID].colour[3], 16),parseInt(nodes[msg.nodeID].colour[4] + nodes[msg.nodeID].colour[5], 16)]);
@@ -142,9 +145,11 @@ io.on('connection', function(socket){
   });
 
   socket.on('enabledAll', function(msg){
+    var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
     for (var property in nodes) {
       if(nodes.hasOwnProperty(property)){
         nodes[property].enabled = msg.enabled;
+        nodesToSave[property].enabled = msg.enabled;
         if((nodes[property].enabled) && (nodes[property].online)){
           artnetInstances[property].enable();
           artnetInstances[property].set([parseInt(nodes[property].colour[0] + nodes[property].colour[1], 16),parseInt(nodes[property].colour[2] + nodes[property].colour[3], 16),parseInt(nodes[property].colour[4] + nodes[property].colour[5], 16)]);
@@ -158,6 +163,7 @@ io.on('connection', function(socket){
         io.emit('enabled', {nodeID:nodes[property].nodeID, enabled:msg.enabled});
       }
     }
+    fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
   });
 });
 
