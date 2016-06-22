@@ -10,7 +10,7 @@
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap theme -->
-  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <!--<link href="css/bootstrap-theme.min.css" rel="stylesheet">-->
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -68,6 +68,7 @@
       <ul class="nav nav-tabs">
         <li role="presentation">&nbsp;&nbsp;</li>
         <li role="presentation" rel="overview" class="active"><a href="#">Overview</a></li>
+        <li role="presentation" rel="tools"><a href="#">Tools</a></li>
         <li role="presentation" rel="server_settings"><a href="#">Server Settings</a></li>
       </ul>
 
@@ -81,6 +82,19 @@
           </div>
           <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="height: 100%">
             <iframe src="about:blank" name="nodeframe" seamless="seamless" width="100%" style="height: calc(100vh - 70px)"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tools Panel -->
+      <div class="content" id="tools">
+        <div class="container-fluid">
+          <div class="col-sm-12">
+            &nbsp;
+          </div>
+          <div class="col-sm-12">
+            <button type="button" class="btn btn-default" id="dissableAll">Disable all nodes</button>
+            <button class="btn btn-default" id="enableAll">Enable all nodes</button>
           </div>
         </div>
       </div>
@@ -552,6 +566,14 @@
             }
           }
         }
+      });
+
+      $("#dissableAll").click(function(){
+        socket.emit('enabledAll', {enabled:false});
+      });
+
+      $("#enableAll").click(function(){
+        socket.emit('enabledAll', {enabled:true});
       });
     </script>
   </body>

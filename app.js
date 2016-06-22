@@ -140,6 +140,25 @@ io.on('connection', function(socket){
     }
     io.emit('enabled', msg);
   });
+
+  socket.on('enabledAll', function(msg){
+    for (var property in nodes) {
+      if(nodes.hasOwnProperty(property)){
+        nodes[property].enabled = msg.enabled;
+        if((nodes[property].enabled) && (nodes[property].online)){
+          artnetInstances[property].enable();
+          artnetInstances[property].set([parseInt(nodes[property].colour[0] + nodes[property].colour[1], 16),parseInt(nodes[property].colour[2] + nodes[property].colour[3], 16),parseInt(nodes[property].colour[4] + nodes[property].colour[5], 16)]);
+        }
+        else{
+          artnetInstances[property].set([0,0,0]);
+          setTimeout(function (){
+            artnetInstances[property].disable();
+          }, 30);
+        }
+        io.emit('enabled', {nodeID:nodes[property].nodeID, enabled:msg.enabled});
+      }
+    }
+  });
 });
 
 
