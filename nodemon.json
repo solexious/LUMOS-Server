@@ -1,0 +1,3 @@
+{
+  "ignore": ["nodeIDs.json","nodes.json"]
+}
