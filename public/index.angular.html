@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="lumosControl">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>LUMOS - Command &amp; Control</title>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket.min.js"></script>
+  <script type="text/javascript" src="./js/ng-app.js"></script>
+
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    iframe[seamless]{
+      background-color: transparent;
+      border: 0px none transparent;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    .btn-pad {
+      padding-top: 15px;
+    }
+
+    .content{
+      display:none;
+    }
+
+    .content.active{
+      display:block;
+    }
+
+    a.disabled {
+      pointer-events: none;
+    }
+
+    .btnNode {
+      padding: 7px !important;
+    }
+
+    .btnNodeDrop {
+      padding-top: 7px !important;
+      padding-bottom: 7px !important;
+      padding-left: 9px !important;
+      padding-right: 9px !important;
+    }
+
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+
+    .text-muted {
+      color: #CCC;
+    }
+  </style>
+</head>
+<body ng-controller="NodeController as lumos">
+  <br/>
+  <ul class="nav nav-tabs">
+    <li role="presentation">&nbsp;&nbsp;</li>
+    <li role="presentation" rel="overview" class="active"><a href="#">Overview</a></li>
+    <li role="presentation" rel="tools"><a href="#">Tools</a></li>
+    <li role="presentation" rel="server_settings"><a href="#">Server Settings</a></li>
+  </ul>
+
+  <!-- Overview Panel -->
+  <div class="content active" id="overview">
+    <div class="container-fluid">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <!-- Node Buttons -->
+        <node-button ng-repeat="node in lumos.nodes"></node-button>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="height: 100%">
+        <iframe src="about:blank" name="nodeframe" seamless="seamless" width="100%" style="height: calc(100vh - 70px)"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tools Panel -->
+  <div class="content" id="tools">
+    <div class="container-fluid">
+      <div class="col-sm-12">
+        &nbsp;
+      </div>
+      <div class="col-sm-12">
+        <button type="button" class="btn btn-default" id="dissableAll">Disable all nodes</button>
+        <button class="btn btn-default" id="enableAll">Enable all nodes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Server Settings Panel -->
+  <div class="content" id="server_settings">
+    <div class="container">
+      <div class="col-sm-12">
+        &nbsp;
+      </div>
+    </div>
+  </div>
+
+  <!-- Node Info Modals -->
+  <node-modal ng-repeat="node in lumos.nodes"></node-modal>
+
+  <!-- Confirm shutdown Modal -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="shutdownModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Shutdown Node</h4>
+        </div>
+        <div class="modal-body">
+          <p>&nbsp;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" id="modalShutdownBTN" href="#" target="nodeframe" onclick="$('#shutdownModal').modal('hide');">Shutdown</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
