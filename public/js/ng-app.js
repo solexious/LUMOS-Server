@@ -10,12 +10,15 @@
     this.nodes = [];
 
     socket.on('connect', function(){
-      console.log("socket.io connected");
       socket.emit('syncRequest');
     });
 
     socket.on('syncResponce', function(msg){
       nodeCtrl.nodes = msg;
+    });
+
+    socket.on('nodeUpdated', function(msg){
+      nodeCtrl.nodes[msg.nodeID] = msg;
     });
   });
 
