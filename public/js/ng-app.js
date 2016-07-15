@@ -1,5 +1,5 @@
 (function() {
-  var app = angular.module('lumosControl',['btford.socket-io']);
+  var app = angular.module('lumosControl',['btford.socket-io', 'chart.js']);
 
   app.factory('socket', function (socketFactory) {
     return socketFactory();
@@ -9,6 +9,10 @@
     var nodeCtrl = this;
     this.nodes = [];
 
+    this.toggleEnabled = function(nodeID){
+      socket.emit('enabled', {nodeID: nodeID, enabled: !nodeCtrl.nodes[nodeID].enabled});
+    };
+
     socket.on('connect', function(){
       socket.emit('syncRequest');
     });
@@ -17,8 +21,12 @@
       nodeCtrl.nodes = msg;
     });
 
+    socket.on('updateNodes', function(msg){
+      $.extend(nodeCtrl.nodes, msg);
+    });
+
     socket.on('nodeUpdated', function(msg){
-      nodeCtrl.nodes[msg.nodeID] = msg;
+      $.extend(nodeCtrl.nodes[msg.nodeID], msg);
     });
   });
 
@@ -43,81 +51,4 @@
         return(1e4+""+a).slice(-b);
     };
   });
-
-  var nodes = [{
-    battery: 25,
-    colour: "000000",
-    current_voltage: 800,
-    current_voltage_data: [
-      802,
-      801,
-      802,
-      800
-    ],
-    enabled: true,
-    hw_version: "0.2",
-    ip: "192.168.0.111",
-    lowest_voltage: 800,
-    lowest_voltage_data: [
-      802,
-      801,
-      801,
-      800
-    ],
-    mac: "5C:CF:7F:14:60:35",
-    name: "LUMOS-1460FF",
-    nodeID: 1,
-    online: false,
-    sw_version: "0.41"
-  },{
-    battery: 25,
-    colour: "000000",
-    current_voltage: 800,
-    current_voltage_data: [
-      802,
-      801,
-      802,
-      800
-    ],
-    enabled: true,
-    hw_version: "0.2",
-    ip: "192.168.0.111",
-    lowest_voltage: 800,
-    lowest_voltage_data: [
-      802,
-      801,
-      801,
-      800
-    ],
-    mac: "5C:CF:7F:14:60:35",
-    name: "LUMOS-146035",
-    nodeID: 2,
-    online: true,
-    sw_version: "0.41"
-  },{
-    battery: 25,
-    colour: "000000",
-    current_voltage: 800,
-    current_voltage_data: [
-      802,
-      801,
-      802,
-      800
-    ],
-    enabled: false,
-    hw_version: "0.2",
-    ip: "192.168.0.111",
-    lowest_voltage: 800,
-    lowest_voltage_data: [
-      802,
-      801,
-      801,
-      800
-    ],
-    mac: "5C:CF:7F:14:60:35",
-    name: "LUMOS-FF3311",
-    nodeID: 3,
-    online: true,
-    sw_version: "0.41"
-  }];
 })();

@@ -112,19 +112,20 @@ app.route('/nodes')
   });
 
 io.on('connection', function(socket){
-  // console.log('a user connected');
+  console.log('a user connected');
   socket.on('disconnect', function(){
-    // console.log('user disconnected');
+    console.log('user disconnected');
   });
 
   socket.on('syncRequest', function(msg){
     // Grab all entries and send them
-    // console.log('syncRequest received');
+    console.log('syncRequest received');
     socket.emit('syncResponce', nodes);
   });
 
   socket.on('enabled', function(msg){
     // Set node as enabled/disabled
+    //console.log(msg);
     if((msg.nodeID !== undefined) && (msg.enabled !== undefined)){
       nodes[msg.nodeID].enabled = msg.enabled;
       var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
@@ -141,7 +142,7 @@ io.on('connection', function(socket){
         }, 30);
       }
     }
-    io.emit('enabled', msg);
+    io.emit('nodeUpdated', {nodeID: msg.nodeID, enabled: nodes[msg.nodeID].enabled});
   });
 
   socket.on('enabledAll', function(msg){
@@ -160,7 +161,7 @@ io.on('connection', function(socket){
             artnetInstances[property].disable();
           }, 30);
         }
-        io.emit('enabled', {nodeID:nodes[property].nodeID, enabled:msg.enabled});
+        io.emit('nodeUpdated', {nodeID:nodes[property].nodeID, enabled:msg.enabled});
       }
     }
     fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
@@ -204,12 +205,6 @@ udpBeat.on('message', function (message, remote) {
         nodes[nodeID].battery = 100;
       }
 
-      // Add code to emit io message
-      messageJSON.nodeID = nodes[nodeID].nodeID;
-      messageJSON.colour = nodes[nodeID].colour;
-      messageJSON.enabled = nodes[nodeID].enabled;
-      messageJSON.online = nodes[nodeID].online;
-
       // Save data to array for initial loading of page
       nodes[nodeID].ip = messageJSON.ip;
       nodes[nodeID].current_voltage = messageJSON.current_voltage;
@@ -217,6 +212,7 @@ udpBeat.on('message', function (message, remote) {
       nodes[nodeID].mac = messageJSON.mac;
       nodes[nodeID].sw_version = messageJSON.sw_version;
       nodes[nodeID].hw_version = messageJSON.hw_version;
+      nodes[nodeID].output_enabled = messageJSON.output_enabled;
 
       if(nodes[nodeID].current_voltage_data.push(messageJSON.current_voltage) > 6500){
         nodes[nodeID].current_voltage_data.shift();
@@ -231,7 +227,7 @@ udpBeat.on('message', function (message, remote) {
         artnetInstances[nodeID].enable();
       }
 
-      io.emit('beat', messageJSON);
+      io.emit('nodeUpdated', nodes[nodeID]);
 
       pingSession.pingHost(nodes[nodeID].ip, function (error, target){
       if (error){
@@ -242,7 +238,7 @@ udpBeat.on('message', function (message, remote) {
         if(nodes[nodeID].enabled === true){
           artnetInstances[nodeID].enable();
         }
-        io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
+        io.emit('nodeUpdated', {"nodeID":nodeID,"online":nodes[nodeID].online});
         // Start timer to make offline
         if(timeouts[nodeID] !== undefined){
           clearTimeout(timeouts[nodeID]);
@@ -320,16 +316,17 @@ function setOffline(nodeID) {
   // console.info("offline");
   nodes[nodeID].online = false;
   artnetInstances[nodeID].disable();
-  io.emit('online-status', {"nodeID":nodeID,"online":nodes[nodeID].online});
+  io.emit('nodeUpdated', {"nodeID":nodeID,"online":nodes[nodeID].online});
 }
 
 (function() {
   var timeout = setInterval(function(){
-    var output = {nodes:[]};
-    for(var i = 0; i < Object.keys(nodes).length; i++){
-      output.nodes.push({"nodeID":nodes[i+1].nodeID,"colour":nodes[i+1].colour});
-    }
-    io.emit('colours', output);
+    // var output = {nodes:[]};
+    // for(var i = 0; i < Object.keys(nodes).length; i++){
+    //   output.nodes.push({"nodeID":nodes[i+1].nodeID,"colour":nodes[i+1].colour});
+    // }
+    // io.emit('colours', output);
+    io.emit('updateNodes', nodes);
   }, 1000);
 })();
 

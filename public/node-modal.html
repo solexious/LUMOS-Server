@@ -95,7 +95,8 @@
                 <h3 class="panel-title">Voltage Graph</h3>
               </div>
               <div class="panel-body" style="padding-bottom:0px">
-                <canvas id="nodeDetailModalStatusVoltageChart{{ nodeID }}"></canvas>
+                <canvas id="linechart{{node.nodeID}}" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true"
+                      chart-click="onClick" chart-hover="onHover" chart-series="series"></canvas>
               </div>
             </div>
           </div>
