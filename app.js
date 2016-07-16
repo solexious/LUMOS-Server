@@ -7,6 +7,7 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var Artnet = require('artnet');
 var ping = require ("net-ping");
+var _ = require('lodash');
 
 var msgpack = require("msgpack-lite");
 
@@ -33,18 +34,17 @@ var UDP_COLOUR_SHORT_HOST = '0.0.0.0';
 
 server.listen(3000);
 
-var nodes = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
+var nodefile = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
+var nodes = nodefile.nodes;
 var nodeIDs = safelyParseJSON(fs.readFileSync('nodeIDs.json', 'utf8'));
 var timeouts = [];
 var artnetInstances = [];
 
 (function(){
-  for (var property in nodes) {
-    if(nodes.hasOwnProperty(property)){
-      artnetInstances[nodes[property].nodeID] = Artnet({host:"0.0.0.0",refresh:1000,minPackageLength:3,maxPackageLength:10,enabled:false,frameDelay:30});
-      artnetInstances[nodes[property].nodeID].set([0,0,0]);
-    }
-  }
+  nodes.forEach(function(cur, i){
+    artnetInstances[nodes[i].nodeID - 1] = Artnet({host:"0.0.0.0",refresh:1000,minPackageLength:3,maxPackageLength:10,enabled:false,frameDelay:30});
+    artnetInstances[nodes[i].nodeID - 1].set([0,0,0]);
+  });
 })();
 
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -56,11 +56,9 @@ app.route('/nodes')
 
     var jsonNodes = {};
     jsonNodes.nodes = [];
-    for (var property in nodes) {
-      if(nodes.hasOwnProperty(property)){
-        jsonNodes.nodes.push({"nodeID" : nodes[property].nodeID, "battery" : nodes[property].battery, "online" : nodes[property].online, "enabled" : nodes[property].enabled, "colour" : nodes[property].colour});
-      }
-    }
+    nodes.forEach(function(cur, i) {
+        jsonNodes.nodes.push({"nodeID" : nodes[i].nodeID, "battery" : nodes[i].battery, "online" : nodes[i].online, "enabled" : nodes[i].enabled, "colour" : nodes[i].colour});
+    });
 
     res.send(JSON.stringify(jsonNodes, null, 2));
   })
@@ -69,7 +67,7 @@ app.route('/nodes')
     var responce = {"nodes" : []};
 
     if(req.body.nodes !== undefined){
-      for(var i = 0; i < req.body.nodes.length; i++){
+      rec.body.nodes.forEach(function(cur, i) {
         // Do we have an id?
         if(req.body.nodes[i].nodeID !== undefined){
           // Is it a number?
@@ -81,10 +79,10 @@ app.route('/nodes')
                 // We got totally valid data, now check we have that node
                 if(nodes[req.body.nodes[i].nodeID] !== undefined){
                   // It exists! Update the colour
-                  nodes[req.body.nodes[i].nodeID].colour = req.body.nodes[i].colour;
+                  nodes[req.body.nodes[i].nodeID - 1].colour = req.body.nodes[i].colour;
                   responce.nodes.push({"nodeID":req.body.nodes[i].nodeID,"result":"success"});
-                  if(nodes[req.body.nodes[i].nodeID].enabled === true){
-                    artnetInstances[req.body.nodes[i].nodeID].set([parseInt(req.body.nodes[i].colour[0] + req.body.nodes[i].colour[1], 16),parseInt(req.body.nodes[i].colour[2] + req.body.nodes[i].colour[3], 16),parseInt(req.body.nodes[i].colour[4] + req.body.nodes[i].colour[5], 16)]);
+                  if(nodes[req.body.nodes[i].nodeID - 1].enabled === true){
+                    artnetInstances[req.body.nodes[i].nodeID - 1].set([parseInt(req.body.nodes[i].colour[0] + req.body.nodes[i].colour[1], 16),parseInt(req.body.nodes[i].colour[2] + req.body.nodes[i].colour[3], 16),parseInt(req.body.nodes[i].colour[4] + req.body.nodes[i].colour[5], 16)]);
                   }
                 }
                 else{
@@ -106,7 +104,7 @@ app.route('/nodes')
         else{
           responce.nodes.push({"nodeID":"?","result":"missing nodeID"});
         }
-      }
+      });
     }
     res.send(responce);
   });
@@ -125,45 +123,44 @@ io.on('connection', function(socket){
 
   socket.on('enabled', function(msg){
     // Set node as enabled/disabled
-    //console.log(msg);
+    console.log(msg);
     if((msg.nodeID !== undefined) && (msg.enabled !== undefined)){
-      nodes[msg.nodeID].enabled = msg.enabled;
+      nodes[msg.nodeID - 1].enabled = msg.enabled;
       var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
-      nodesToSave[msg.nodeID].enabled = msg.enabled;
+      nodesToSave.nodes[msg.nodeID - 1].enabled = msg.enabled;
       fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
-      if((nodes[msg.nodeID].enabled) && (nodes[msg.nodeID].online)){
-        artnetInstances[msg.nodeID].enable();
-        artnetInstances[msg.nodeID].set([parseInt(nodes[msg.nodeID].colour[0] + nodes[msg.nodeID].colour[1], 16),parseInt(nodes[msg.nodeID].colour[2] + nodes[msg.nodeID].colour[3], 16),parseInt(nodes[msg.nodeID].colour[4] + nodes[msg.nodeID].colour[5], 16)]);
+      if((nodes[msg.nodeID - 1].enabled) && (nodes[msg.nodeID - 1].online)){
+        artnetInstances[msg.nodeID - 1].enable();
+        artnetInstances[msg.nodeID - 1].set([parseInt(nodes[msg.nodeID - 1].colour[0] + nodes[msg.nodeID - 1].colour[1], 16),parseInt(nodes[msg.nodeID - 1].colour[2] + nodes[msg.nodeID - 1].colour[3], 16),parseInt(nodes[msg.nodeID - 1].colour[4] + nodes[msg.nodeID - 1].colour[5], 16)]);
       }
       else{
-        artnetInstances[msg.nodeID].set([0,0,0]);
+        artnetInstances[msg.nodeID - 1].set([0,0,0]);
         setTimeout(function (){
-          artnetInstances[msg.nodeID].disable();
+          artnetInstances[msg.nodeID - 1].disable();
         }, 30);
       }
     }
-    io.emit('nodeUpdated', {nodeID: msg.nodeID, enabled: nodes[msg.nodeID].enabled});
+    io.emit('nodeUpdated', {nodeID: msg.nodeID, enabled: nodes[msg.nodeID - 1].enabled});
   });
 
   socket.on('enabledAll', function(msg){
     var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
-    for (var property in nodes) {
-      if(nodes.hasOwnProperty(property)){
-        nodes[property].enabled = msg.enabled;
-        nodesToSave[property].enabled = msg.enabled;
-        if((nodes[property].enabled) && (nodes[property].online)){
-          artnetInstances[property].enable();
-          artnetInstances[property].set([parseInt(nodes[property].colour[0] + nodes[property].colour[1], 16),parseInt(nodes[property].colour[2] + nodes[property].colour[3], 16),parseInt(nodes[property].colour[4] + nodes[property].colour[5], 16)]);
-        }
-        else{
-          artnetInstances[property].set([0,0,0]);
-          setTimeout(function (){
-            artnetInstances[property].disable();
-          }, 30);
-        }
-        io.emit('nodeUpdated', {nodeID:nodes[property].nodeID, enabled:msg.enabled});
+    nodes.forEach(function(cur, i) {
+      node.enabled = msg.enabled;
+      id = nodes[i].nodeID - 1;
+      nodesToSave.nodes[id].enabled = msg.enabled;
+      if((nodes[i].enabled) && (nodes[i].online)){
+        artnetInstances[id].enable();
+        artnetInstances[id].set([parseInt(nodes[id].colour[0] + nodes[id].colour[1], 16),parseInt(nodes[id].colour[2] + nodes[id].colour[3], 16),parseInt(nodes[id].colour[4] + nodes[id].colour[5], 16)]);
       }
-    }
+      else{
+        artnetInstances[id].set([0,0,0]);
+        setTimeout(function (){
+          artnetInstances[id].disable();
+        }, 30);
+      }
+      io.emit('nodeUpdated', {nodeID:node.nodeID, enabled:msg.enabled});
+    });
     fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
   });
 });
@@ -186,7 +183,7 @@ udpSetColourShort.on('listening', function () {
 });
 
 udpBeat.on('message', function (message, remote) {
-  // console.log('got beat: ' + message);
+  console.log('got beat: ' + message);
 
   var messageJSON = safelyParseJSON(message.toString());
 
@@ -194,10 +191,10 @@ udpBeat.on('message', function (message, remote) {
     if ((messageJSON.mac !== undefined) && (messageJSON.ip !== undefined) && (messageJSON.max_voltage !== undefined) && (messageJSON.min_voltage !== undefined) && (messageJSON.current_voltage !== undefined) && (messageJSON.lowest_voltage !== undefined) && (messageJSON.name !== undefined) && (messageJSON.output_enabled !== undefined)){
 
       // Get node id
-      var nodeID = nodeIDs[messageJSON.name];
+      var nodeID = nodeIDs[messageJSON.name] - 1;
 
       // Add voltage percent to nodes
-      nodes[nodeID].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
+      nodes[nodeID ].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
       if(nodes[nodeID].battery < 0){
         nodes[nodeID].battery = 0;
       }
@@ -206,13 +203,7 @@ udpBeat.on('message', function (message, remote) {
       }
 
       // Save data to array for initial loading of page
-      nodes[nodeID].ip = messageJSON.ip;
-      nodes[nodeID].current_voltage = messageJSON.current_voltage;
-      nodes[nodeID].lowest_voltage = messageJSON.lowest_voltage;
-      nodes[nodeID].mac = messageJSON.mac;
-      nodes[nodeID].sw_version = messageJSON.sw_version;
-      nodes[nodeID].hw_version = messageJSON.hw_version;
-      nodes[nodeID].output_enabled = messageJSON.output_enabled;
+      _.extend(nodes[nodeID], messageJSON);
 
       if(nodes[nodeID].current_voltage_data.push(messageJSON.current_voltage) > 6500){
         nodes[nodeID].current_voltage_data.shift();
@@ -223,11 +214,15 @@ udpBeat.on('message', function (message, remote) {
 
       // Setup artnet
       artnetInstances[nodeID].setHost(messageJSON.ip);
-      if((nodes[nodeID].online) && (nodes[nodeID.enabled])){
+      if((nodes[nodeID].online) && (nodes[nodeID].enabled)){
         artnetInstances[nodeID].enable();
       }
 
-      io.emit('nodeUpdated', nodes[nodeID]);
+      var result = Object.assign({}, nodes[nodeID]);
+      delete result.current_voltage_data;
+      delete result.lowest_voltage_data;
+
+      io.emit('nodeUpdated', result);
 
       pingSession.pingHost(nodes[nodeID].ip, function (error, target){
       if (error){
@@ -238,12 +233,12 @@ udpBeat.on('message', function (message, remote) {
         if(nodes[nodeID].enabled === true){
           artnetInstances[nodeID].enable();
         }
-        io.emit('nodeUpdated', {"nodeID":nodeID,"online":nodes[nodeID].online});
+        io.emit('nodeUpdated', {"nodeID":nodeID + 1,"online":nodes[nodeID].online});
         // Start timer to make offline
         if(timeouts[nodeID] !== undefined){
           clearTimeout(timeouts[nodeID]);
         }
-        timeouts[nodeID] = setTimeout(function() { setOffline(nodeID); }, 25000);
+        timeouts[nodeID] = setTimeout(function() { setOffline(nodeID + 1); }, 25000);
       }
       });
     }
@@ -256,7 +251,7 @@ udpSetColourLong.on('message', function (message, remote) {
   var messageJSON = safelyParseJSON(message.toString());
 
   if(messageJSON.nodes !== undefined){
-    for(var i = 0; i < messageJSON.nodes.length; i++){
+    messageJSON.nodes.forEach(function(cur, i) {
       // Do we have an id?
       if(messageJSON.nodes[i].nodeID !== undefined){
         // Is it a number?
@@ -266,18 +261,18 @@ udpSetColourLong.on('message', function (message, remote) {
             // Is it a valid colour?
             if(messageJSON.nodes[i].colour.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
               // We got totally valid data, now check we have that node
-              if(nodes[messageJSON.nodes[i].nodeID] !== undefined){
+              if(nodes[messageJSON.nodes[i].nodeID - 1] !== undefined){
                 // It exists! Update the colour
-                nodes[messageJSON.nodes[i].nodeID].colour = messageJSON.nodes[i].colour;
-                if(nodes[messageJSON.nodes[i].nodeID].enabled === true){
-                  artnetInstances[messageJSON.nodes[i].nodeID].set([parseInt(messageJSON.nodes[i].colour[0] + messageJSON.nodes[i].colour[1], 16),parseInt(messageJSON.nodes[i].colour[2] + messageJSON.nodes[i].colour[3], 16),parseInt(messageJSON.nodes[i].colour[4] + messageJSON.nodes[i].colour[5], 16)]);
+                nodes[messageJSON.nodes[i].nodeID - 1].colour = messageJSON.nodes[i].colour;
+                if(nodes[messageJSON.nodes[i].nodeID - 1].enabled === true){
+                  artnetInstances[messageJSON.nodes[i].nodeID - 1].set([parseInt(messageJSON.nodes[i].colour[0] + messageJSON.nodes[i].colour[1], 16),parseInt(messageJSON.nodes[i].colour[2] + messageJSON.nodes[i].colour[3], 16),parseInt(messageJSON.nodes[i].colour[4] + messageJSON.nodes[i].colour[5], 16)]);
                 }
               }
             }
           }
         }
       }
-    }
+    });
   }
 });
 
@@ -287,7 +282,7 @@ udpSetColourShort.on('message', function (message, remote) {
   var messageJSON = msgpack.decode(message);
 
   if(messageJSON.ns !== undefined){
-    for(var i = 0; i < messageJSON.ns.length; i++){
+    messageJSON.ns.forEach(function(cur, i) {
       // Do we have an id?
       if(messageJSON.ns[i].n !== undefined){
         // Is it a number?
@@ -297,36 +292,33 @@ udpSetColourShort.on('message', function (message, remote) {
             // Is it a valid colour?
             if(messageJSON.ns[i].c.match(/^(?:[0-9a-fA-F]{3}){1,2}$/)){
               // We got totally valid data, now check we have that node
-              if(nodes[messageJSON.ns[i].n] !== undefined){
+              if(nodes[messageJSON.ns[i].n - 1] !== undefined){
                 // It exists! Update the colour
-                nodes[messageJSON.ns[i].n].colour = messageJSON.ns[i].c;
-                if(nodes[messageJSON.ns[i].n].enabled === true){
-                  artnetInstances[messageJSON.ns[i].n].set([parseInt(messageJSON.ns[i].c[0] + messageJSON.ns[i].c[1], 16),parseInt(messageJSON.ns[i].c[2] + messageJSON.ns[i].c[3], 16),parseInt(messageJSON.ns[i].c[4] + messageJSON.ns[i].c[5], 16)]);
+                nodes[messageJSON.ns[i].n - 1].colour = messageJSON.ns[i].c;
+                if(nodes[messageJSON.ns[i].n - 1].enabled === true){
+                  artnetInstances[messageJSON.ns[i].n - 1].set([parseInt(messageJSON.ns[i].c[0] + messageJSON.ns[i].c[1], 16),parseInt(messageJSON.ns[i].c[2] + messageJSON.ns[i].c[3], 16),parseInt(messageJSON.ns[i].c[4] + messageJSON.ns[i].c[5], 16)]);
                 }
               }
             }
           }
         }
       }
-    }
+    });
   }
 });
 
 function setOffline(nodeID) {
   // console.info("offline");
-  nodes[nodeID].online = false;
-  artnetInstances[nodeID].disable();
-  io.emit('nodeUpdated', {"nodeID":nodeID,"online":nodes[nodeID].online});
+  nodes[nodeID - 1].online = false;
+  artnetInstances[nodeID - 1].disable();
+  io.emit('nodeUpdated', {"nodeID":nodeID,"online":nodes[nodeID - 1].online});
 }
 
 (function() {
   var timeout = setInterval(function(){
-    // var output = {nodes:[]};
-    // for(var i = 0; i < Object.keys(nodes).length; i++){
-    //   output.nodes.push({"nodeID":nodes[i+1].nodeID,"colour":nodes[i+1].colour});
-    // }
-    // io.emit('colours', output);
-    io.emit('updateNodes', nodes);
+    io.emit('updateNodes', nodes.map( function(current, index, array){
+      return {"nodeID": current.nodeID, "colour": current.colour};
+    }));
   }, 1000);
 })();
 

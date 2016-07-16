@@ -10,7 +10,7 @@
     this.nodes = [];
 
     this.toggleEnabled = function(nodeID){
-      socket.emit('enabled', {nodeID: nodeID, enabled: !nodeCtrl.nodes[nodeID].enabled});
+      socket.emit('enabled', {nodeID: nodeID, enabled: !nodeCtrl.nodes[nodeID - 1].enabled});
     };
 
     socket.on('connect', function(){
@@ -18,15 +18,20 @@
     });
 
     socket.on('syncResponce', function(msg){
+      console.log(msg);
       nodeCtrl.nodes = msg;
     });
 
     socket.on('updateNodes', function(msg){
-      $.extend(nodeCtrl.nodes, msg);
+      console.log(msg);
+      for(var i = 0; i < msg.length; i++){
+        $.extend(nodeCtrl.nodes[msg[i].nodeID - 1], msg[i]);
+      }
     });
 
     socket.on('nodeUpdated', function(msg){
-      $.extend(nodeCtrl.nodes[msg.nodeID], msg);
+      console.log(msg);
+      $.extend(nodeCtrl.nodes[msg.nodeID - 1], msg);
     });
   });
 
