@@ -14,7 +14,7 @@
       "name": "LUMOS-146035",
       "nodeID": 2,
       "colour": "000000",
-      "enabled": false,
+      "enabled": true,
       "online": false,
       "current_voltage_data": [],
       "lowest_voltage_data": [],

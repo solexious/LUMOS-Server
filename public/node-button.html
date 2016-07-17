@@ -10,7 +10,7 @@
       <li ng-class="{'disabled' : !node.online}"><a ng-href="http://admin:esp8266@{{node.ip}}/findme" ng-class="{'disabled' : !node.online}" target="nodeframe"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Find Me</a></li>
       <li><a href="#" ng-click="lumos.toggleEnabled(node.nodeID)"><span class="glyphicon {{node.enabled ? 'glyphicon-remove' : 'glyphicon-ok'}}" aria-hidden="true"></span> {{node.enabled ? 'Disable' : 'Enable'}}</a></li>
       <li role="separator" class="divider"></li>
-      <li ng-class="{'disabled' : !node.online}"><a href="#" ng-class="{'disabled' : !node.online}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Shutdown</a></li>
+      <li ng-class="{'disabled' : !node.online}" data-toggle="modal" data-target="{{node.online ? '#shutdownModal' : ''}}" data-name="{{ node.name }}" data-nodeid="{{ node.nodeID }}" data-nodeip="{{ node.ip }}"><a href="#" ng-class="{'disabled' : !node.online}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Shutdown</a></li>
     </ul>
   </div>
 </div>
