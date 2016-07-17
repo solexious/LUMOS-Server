@@ -1,12 +1,4 @@
 # lumos
-## Install
-You will need a current version of nodejs, npm and nodemon installed.
-
-Install dependencies using `npm install`
-
-## Run
-Recomended to run with `nodemon`
-
 ## Communication
 ### Get node info
 #### HTTP
@@ -119,3 +111,43 @@ The format is as follows (MessagePack removes white space by default):
 }
 ```
 No response is given to UDP Packets.
+
+## Linux (ubuntu 16.04) notes
+### Install
+`sudo apt-get update`
+
+`sudo apt-get upgrade`
+
+`sudo apt-get install build-essential python git`
+
+`sudo -E curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -`
+
+`sudo apt-get install nodejs`
+
+`node --version` (should be 6.3.0 or later)
+
+`sudo setcap 'cap_net_bind_service=+ep' $(readlink -f $(which node))`
+
+`sudo setcap 'cap_net_raw=+ep' $(readlink -f $(which node))`
+
+`sudo npm install nodemon forever -g`
+
+`cd ~`
+
+`git clone https://github.com/solexious/LUMOS-Server.git`
+
+`cd ~/LUMOS-Server`
+
+`sudo npm install`
+
+### Run Development
+`cd ~/LUMOS-Server`
+
+`nodemon`
+
+### Run Production
+#### Start
+`forever start ~/LUMOS-Server/app.js`
+
+#### Stop
+`forever stop ~/LUMOS-Server/app.js`
