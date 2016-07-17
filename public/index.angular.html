@@ -65,17 +65,17 @@
     }
   </style>
 </head>
-<body ng-controller="NodeController as lumos">
+<body ng-controller="NodeController as lumos" ng-init="tab = 1">
   <br/>
   <ul class="nav nav-tabs">
     <li role="presentation">&nbsp;&nbsp;</li>
-    <li role="presentation" rel="overview" class="active"><a href="#">Overview</a></li>
-    <li role="presentation" rel="tools"><a href="#">Tools</a></li>
-    <li role="presentation" rel="server_settings"><a href="#">Server Settings</a></li>
+    <li role="presentation" ng-class="{ active:tab === 1 }"><a href="#" ng-click="tab = 1">Overview</a></li>
+    <li role="presentation" ng-class="{ active:tab === 2 }"><a href="#" ng-click="tab = 2">Tools</a></li>
+    <li role="presentation" ng-class="{ active:tab === 3 }"><a href="#" ng-click="tab = 3">Server Settings</a></li>
   </ul>
 
   <!-- Overview Panel -->
-  <div class="content active" id="overview">
+  <div ng-show="tab === 1">
     <div class="container-fluid">
       <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
         <!-- Node Buttons -->
@@ -88,7 +88,7 @@
   </div>
 
   <!-- Tools Panel -->
-  <div class="content" id="tools">
+  <div ng-show="tab === 2">
     <div class="container-fluid">
       <div class="col-sm-12">
         &nbsp;
@@ -101,7 +101,7 @@
   </div>
 
   <!-- Server Settings Panel -->
-  <div class="content" id="server_settings">
+  <div ng-show="tab === 3">
     <div class="container">
       <div class="col-sm-12">
         &nbsp;
