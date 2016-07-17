@@ -54,6 +54,10 @@
       socket.emit('enabled', {nodeID: nodeID, enabled: !nodeCtrl.nodes[nodeID - 1].enabled});
     };
 
+    this.enabledAll = function(enabled){
+      socket.emit('enabledAll', {'enabled': enabled});
+    };
+
     socket.on('connect', function(){
       socket.emit('syncRequest');
     });

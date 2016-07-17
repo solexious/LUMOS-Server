@@ -144,9 +144,10 @@ io.on('connection', function(socket){
   });
 
   socket.on('enabledAll', function(msg){
+    console.log(msg);
     var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
     nodes.forEach(function(cur, i) {
-      node.enabled = msg.enabled;
+      nodes[i].enabled = msg.enabled;
       id = nodes[i].nodeID - 1;
       nodesToSave.nodes[id].enabled = msg.enabled;
       if((nodes[i].enabled) && (nodes[i].online)){
@@ -159,7 +160,7 @@ io.on('connection', function(socket){
           artnetInstances[id].disable();
         }, 30);
       }
-      io.emit('nodeUpdated', {nodeID:node.nodeID, enabled:msg.enabled});
+      io.emit('nodeUpdated', {nodeID:nodes[i].nodeID, enabled:msg.enabled});
     });
     fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
   });
@@ -183,7 +184,7 @@ udpSetColourShort.on('listening', function () {
 });
 
 udpBeat.on('message', function (message, remote) {
-  console.log('got beat: ' + message);
+  //console.log('got beat: ' + message);
 
   var messageJSON = safelyParseJSON(message.toString());
 
