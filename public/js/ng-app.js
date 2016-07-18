@@ -79,9 +79,15 @@
       $.extend(nodeCtrl.nodes[msg.nodeID - 1], msg);
       if(msg.current_voltage !== undefined){
         nodeCtrl.nodes[msg.nodeID - 1].current_voltage_data.push(msg.current_voltage);
+        if(nodeCtrl.nodes[msg.nodeID - 1].current_voltage_data.length > 6500){
+          nodeCtrl.nodes[msg.nodeID - 1].current_voltage_data.shift();
+        }
       }
       if(msg.lowest_voltage !== undefined){
         nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.push(msg.lowest_voltage);
+        if(nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.length > 6500){
+          nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.shift();
+        }
       }
     });
   }]);
