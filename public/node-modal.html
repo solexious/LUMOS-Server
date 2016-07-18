@@ -7,95 +7,110 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Status</h3>
-              </div>
-              <div class="panel-body">
-                {{node.online ? 'Online' : 'Offline'}} - {{node.enabled ? 'Enabled' : 'Disabled'}}
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Colour</h3>
-              </div>
-              <div class="panel-body">
-                #{{node.colour}}
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">IP Address</h3>
-              </div>
-              <div class="panel-body">
-                <a target="_blank" ng-class="{'text-muted disabled' : !node.online}" ng-href="http://{{node.ip}}">
-                  {{node.ip}}&nbsp;
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Mac Address</h3>
-              </div>
-              <div class="panel-body" ng-class="{'text-muted' : !node.online}">
-                {{node.mac}}&nbsp;
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Current Voltage</h3>
-              </div>
-              <div class="panel-body" ng-class="{'text-muted' : !node.online}">
-                {{node.current_voltage + " - " + node.battery + "%"}}&nbsp;
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Lowest Voltage</h3>
-              </div>
-              <div class="panel-body" ng-class="{'text-muted' : !node.online}">
-                {{node.lowest_voltage}}&nbsp;
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Hardware Ver'</h3>
-              </div>
-              <div class="panel-body" ng-class="{'text-muted' : !node.online}">
-                {{node.hw_version}}&nbsp;
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Software Ver'</h3>
-              </div>
-              <div class="panel-body" ng-class="{'text-muted' : !node.online}">
-                {{node.sw_version}}&nbsp;
-              </div>
-            </div>
+          <div class="col-sm-12">
+            <ul class="nav nav-tabs" ng-init="node.tab = 1">
+              <li role="presentation">&nbsp;&nbsp;</li>
+              <li role="presentation" ng-class="{ active:node.tab === 1 }"><a href="#" ng-click="node.tab = 1">Overview</a></li>
+              <li role="presentation" ng-class="{ active:node.tab === 2 }"><a href="#" ng-click="node.tab = 2">Graph</a></li>
+              <li role="presentation" ng-class="{ active:node.tab === 3 }"><a href="#" ng-click="node.tab = 3">Location</a></li>
+            </ul>
           </div>
           <div class="col-sm-12">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Voltage Graph</h3>
+            &nbsp;
+          </div>
+          <div ng-show="node.tab === 1">
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Status</h3>
+                </div>
+                <div class="panel-body">
+                  {{node.online ? 'Online' : 'Offline'}} - {{node.enabled ? 'Enabled' : 'Disabled'}}
+                </div>
               </div>
-              <div class="panel-body" style="padding-bottom:0px">
-                <canvas id="linechart{{node.nodeID}}" class="chart chart-line" chart-data="[node.current_voltage_data, node.lowest_voltage_data]" chart-labels="node.current_voltage_data" chart-legend="true" chart-options="options" chart-series="series" chart-dataset-override="datasetOverride"></canvas>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Colour</h3>
+                </div>
+                <div class="panel-body">
+                  #{{node.colour}}
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">IP Address</h3>
+                </div>
+                <div class="panel-body">
+                  <a target="_blank" ng-class="{'text-muted disabled' : !node.online}" ng-href="http://{{node.ip}}">
+                    {{node.ip}}&nbsp;
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Mac Address</h3>
+                </div>
+                <div class="panel-body" ng-class="{'text-muted' : !node.online}">
+                  {{node.mac}}&nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Current Voltage</h3>
+                </div>
+                <div class="panel-body" ng-class="{'text-muted' : !node.online}">
+                  {{node.current_voltage + " - " + node.battery + "%"}}&nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Lowest Voltage</h3>
+                </div>
+                <div class="panel-body" ng-class="{'text-muted' : !node.online}">
+                  {{node.lowest_voltage}}&nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Hardware Ver'</h3>
+                </div>
+                <div class="panel-body" ng-class="{'text-muted' : !node.online}">
+                  {{node.hw_version}}&nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Software Ver'</h3>
+                </div>
+                <div class="panel-body" ng-class="{'text-muted' : !node.online}">
+                  {{node.sw_version}}&nbsp;
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-show="node.tab === 2">
+            <div class="col-sm-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Voltage Graph</h3>
+                </div>
+                <div class="panel-body" style="padding-bottom:0px">
+                  <canvas id="linechart{{node.nodeID}}" class="chart chart-line" chart-data="[node.current_voltage_data, node.lowest_voltage_data]" chart-labels="node.current_voltage_data" chart-legend="true" chart-options="options" chart-series="series" chart-dataset-override="datasetOverride"></canvas>
+                </div>
               </div>
             </div>
           </div>
