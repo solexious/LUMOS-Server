@@ -15,7 +15,7 @@
     // $scope.data = [$scope.current_voltage_data, $scope.lowest_voltage_data];
     // $scope.labels = $scope.current_voltage_data;
 
-    $scope.options = {
+    this.options = {
       animation: false,
       responsive: true,
       legend: {
@@ -53,21 +53,21 @@
           type: 'line',
           mode: 'horizontal',
           scaleID: 'y-axis-0',
-          value: '970',
+          value: 0,
           borderColor: 'rgba(0,255,0,0.8)',
           borderWidth: 1
         },{
           type: 'line',
           mode: 'horizontal',
           scaleID: 'y-axis-0',
-          value: '730',
+          value: 0,
           borderColor: 'rgba(255,165,0,0.8)',
           borderWidth: 1
         },{
           type: 'line',
           mode: 'horizontal',
           scaleID: 'y-axis-0',
-          value: '680',
+          value: 0,
           borderColor: 'rgba(255,0,0,0.8)',
           borderWidth: 1
         }]
@@ -89,6 +89,18 @@
     socket.on('syncResponce', function(msg){
       //console.log(msg);
       nodeCtrl.nodes = msg;
+      nodeCtrl.nodes.forEach( function(cur, i){
+        nodeCtrl.nodes[i].options = nodeCtrl.options;
+        if(msg[i].max_voltage !== undefined){
+          nodeCtrl.nodes[msg[i].nodeID - 1].options.annotation.annotations[0].value = msg[i].max_voltage;
+          if(msg[i].min_led_voltage !== undefined){
+            nodeCtrl.nodes[msg[i].nodeID - 1].options.annotation.annotations[1].value = msg[i].min_led_voltage;
+            if(msg[i].min_self_voltage !== undefined){
+              nodeCtrl.nodes[msg[i].nodeID - 1].options.annotation.annotations[2].value = msg[i].min_self_voltage;
+            }
+          }
+        }
+      });
     });
 
     socket.on('updateNodes', function(msg){
@@ -106,11 +118,20 @@
         if(nodeCtrl.nodes[msg.nodeID - 1].current_voltage_data.length > 6500){
           nodeCtrl.nodes[msg.nodeID - 1].current_voltage_data.shift();
         }
+        if(msg.lowest_voltage !== undefined){
+          nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.push(msg.lowest_voltage);
+          if(nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.length > 6500){
+            nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.shift();
+          }
+        }
       }
-      if(msg.lowest_voltage !== undefined){
-        nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.push(msg.lowest_voltage);
-        if(nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.length > 6500){
-          nodeCtrl.nodes[msg.nodeID - 1].lowest_voltage_data.shift();
+      if(msg.max_voltage !== undefined){
+        nodeCtrl.nodes[msg.nodeID - 1].options.annotation.annotations[0].value = msg.max_voltage;
+        if(msg.min_led_voltage !== undefined){
+          nodeCtrl.nodes[msg.nodeID - 1].options.annotation.annotations[1].value = msg.min_led_voltage;
+          if(msg.min_self_voltage !== undefined){
+            nodeCtrl.nodes[msg.nodeID - 1].options.annotation.annotations[2].value = msg.min_self_voltage;
+          }
         }
       }
     });

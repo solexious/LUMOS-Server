@@ -189,7 +189,7 @@ udpBeat.on('message', function (message, remote) {
   var messageJSON = safelyParseJSON(message.toString());
 
   if(messageJSON !== undefined){
-    if ((messageJSON.mac !== undefined) && (messageJSON.ip !== undefined) && (messageJSON.max_voltage !== undefined) && (messageJSON.min_voltage !== undefined) && (messageJSON.current_voltage !== undefined) && (messageJSON.lowest_voltage !== undefined) && (messageJSON.name !== undefined) && (messageJSON.output_enabled !== undefined)){
+    if ((messageJSON.mac !== undefined) && (messageJSON.ip !== undefined) && (messageJSON.max_voltage !== undefined) && (messageJSON.min_led_voltage !== undefined) && (messageJSON.min_self_voltage !== undefined) && (messageJSON.current_voltage !== undefined) && (messageJSON.lowest_voltage !== undefined) && (messageJSON.name !== undefined) && (messageJSON.output_enabled !== undefined)){
 
       // Get node id
       var nodeID = nodeIDs[messageJSON.name] - 1;
