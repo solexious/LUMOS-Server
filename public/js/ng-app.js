@@ -10,7 +10,7 @@
     this.nodes = [];
 
     // Common chart settings
-    $scope.datasetOverride = [{ fill: false, pointRadius: 0, borderWidth: 1, borderColor: "rgba(255,0,0,0.6)" }, { fill: false, pointRadius: 0, borderColor: "rgba(0,0,255,0.3)" }];
+    $scope.datasetOverride = [{ fill: false, pointRadius: 0, borderWidth: 1, borderColor: "rgba(255,0,0,1)" }, { fill: false, pointRadius: 0, borderColor: "rgba(0,0,255,0.3)" }];
 
     // $scope.data = [$scope.current_voltage_data, $scope.lowest_voltage_data];
     // $scope.labels = $scope.current_voltage_data;
@@ -46,6 +46,30 @@
             min: 675,
             stepSize: 25
           }
+        }]
+      },
+      annotation: {
+        annotations: [{
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: '970',
+          borderColor: 'rgba(0,255,0,0.8)',
+          borderWidth: 1
+        },{
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: '730',
+          borderColor: 'rgba(255,165,0,0.8)',
+          borderWidth: 1
+        },{
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: '680',
+          borderColor: 'rgba(255,0,0,0.8)',
+          borderWidth: 1
         }]
       }
     };

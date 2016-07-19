@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/solexious/LUMOS-Server#readme",
   "dependencies": {
+    "Chart.Annotation.js": "^0.1.0",
     "artnet": "git+https://github.com/solexious/artnet.git",
     "body-parser": "^1.15.2",
+    "chart.js": "^2.1.6",
     "express": "^4.13.4",
     "lodash": "^4.13.1",
     "msgpack-lite": "^0.1.20",
