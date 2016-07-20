@@ -123,7 +123,7 @@ io.on('connection', function(socket){
 
   socket.on('enabled', function(msg){
     // Set node as enabled/disabled
-    console.log(msg);
+    //console.log(msg);
     if((msg.nodeID !== undefined) && (msg.enabled !== undefined)){
       nodes[msg.nodeID - 1].enabled = msg.enabled;
       var nodesToSave = safelyParseJSON(fs.readFileSync('nodes.json', 'utf8'));
@@ -163,6 +163,15 @@ io.on('connection', function(socket){
       io.emit('nodeUpdated', {nodeID:nodes[i].nodeID, enabled:msg.enabled});
     });
     fs.writeFile("nodes.json", JSON.stringify(nodesToSave, null, 2));
+  });
+
+  socket.on('updateNode', function(msg){
+    //console.log(msg);
+    _.extend(nodes[msg.nodeID - 1], msg);
+    if(msg.colour !== undefined){
+      artnetInstances[msg.nodeID - 1].set([parseInt(msg.colour[0] + msg.colour[1], 16),parseInt(msg.colour[2] + msg.colour[3], 16),parseInt(msg.colour[4] + msg.colour[5], 16)]);
+    }
+    socket.emit('nodeUpdated', msg);
   });
 });
 

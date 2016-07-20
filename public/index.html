@@ -8,7 +8,7 @@
   <title>LUMOS - Command &amp; Control</title>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -17,6 +17,8 @@
   <script src="/js/Chart.bundle.min.js"></script>
   <script src="/js/Chart.Annotation.js"></script>
   <script src="/js/angular-chart.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js" type="text/javascript"></script>
+  <script src="/js/colorwheel.js" type="text/javascript"></script>
   <script type="text/javascript" src="./js/ng-app.js"></script>
 
   <!-- Bootstrap -->
@@ -66,7 +68,7 @@
     }
   </style>
 </head>
-<body ng-controller="NodeController as lumos" ng-init="tab = 1">
+<body ng-controller="NodeController as lumos" id="lumos-ng" ng-init="tab = 1">
   <br/>
   <ul class="nav nav-tabs">
     <li role="presentation">&nbsp;&nbsp;</li>
@@ -94,9 +96,32 @@
       <div class="col-sm-12">
         &nbsp;
       </div>
-      <div class="col-sm-12">
-        <button type="button" class="btn btn-default" ng-click="lumos.enabledAll(false)">Disable all nodes</button>
-        <button class="btn btn-default" ng-click="lumos.enabledAll(true)">Enable all nodes</button>
+      <div class="col-md-7 col-lg-5">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Colour Override Controls</h3>
+          </div>
+          <div class="panel-body">
+            <button type="button" class="btn" ng-class="{'active btn-danger' : selectedNode.overriden, 'btn-warning' : !lselectedNode.overriden}" ng-click="lumos.updateNode({nodeID: selectedNode.nodeID, overriden: !selectedNode.overriden})">Override</button>
+            <select ng-model="selectedNode" ng-options="node.nodeID for node in lumos.nodes">
+            </select>
+            #{{selectedNode.colour}} - {{selectedNode.online ? 'Online' : 'Offline'}} - {{selectedNode.enabled ? 'Enabled' : 'Disabled'}}
+            <div id="override_setter" style="width:500px; margin: 0 auto"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Node Controls</h3>
+          </div>
+          <div class="panel-body">
+            <center>
+              <button type="button" class="btn btn-default" ng-click="lumos.enabledAll(false)">Disable all nodes</button>
+              <button class="btn btn-default" ng-click="lumos.enabledAll(true)">Enable all nodes</button>
+            </center>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -133,6 +158,15 @@
   </div>
 
   <script type="text/javascript">
+  // Setup colour wheel
+  var cw;
+  $(document).ready(function(){
+    cw = Raphael.colorwheel($("#override_setter"),500).color("#000000").onchange(function(c){
+      angular.element('#lumos-ng').scope().sendColour(c.hex.slice(1));
+    });
+    // cw.input($('#selectedNodeColour'));
+  });
+
   // Attach details to shutdown modal
   $('#shutdownModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget); // Button that triggered the modal

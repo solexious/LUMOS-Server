@@ -9,6 +9,8 @@
     var nodeCtrl = this;
     this.nodes = [];
 
+    $scope.selectedNode = {};
+
     // Common chart settings
     $scope.datasetOverride = [{ fill: false, pointRadius: 0, borderWidth: 1, borderColor: "rgba(255,0,0,1)" }, { fill: false, pointRadius: 0, borderColor: "rgba(0,0,255,0.3)" }];
 
@@ -82,6 +84,24 @@
       socket.emit('enabledAll', {'enabled': enabled});
     };
 
+    $scope.sendColour = function(c){
+      console.info(c);
+      if($scope.selectedNode.overriden){
+        socket.emit('updateNode', { nodeID: $scope.selectedNode.nodeID, colour: c });
+      }
+    }
+
+    this.updateNode = function(node){
+      socket.emit('updateNode', node);
+      console.info(node);
+    }
+
+    $scope.$watch('selectedNode.colour', function(newVal){
+      if(cw !== undefined){
+        cw.color("#"+newVal);
+      }
+    });
+
     socket.on('connect', function(){
       socket.emit('syncRequest');
     });
@@ -101,6 +121,7 @@
           }
         }
       });
+      $scope.selectedNode = nodeCtrl.nodes[0];
     });
 
     socket.on('updateNodes', function(msg){

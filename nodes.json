@@ -9,7 +9,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-146035",
@@ -20,7 +20,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-145DED",
@@ -31,7 +31,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-145D55",
@@ -42,7 +42,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-147EF9",
@@ -53,7 +53,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-148E65",
@@ -64,7 +64,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-15063D",
@@ -75,7 +75,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-14B47D",
@@ -86,7 +86,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507E9",
@@ -97,7 +97,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-150857",
@@ -108,7 +108,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507BF",
@@ -119,7 +119,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B1",
@@ -130,7 +130,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B2",
@@ -141,7 +141,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B3",
@@ -152,7 +152,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B4",
@@ -163,7 +163,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B5",
@@ -174,7 +174,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B6",
@@ -185,7 +185,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B7",
@@ -196,7 +196,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B8",
@@ -207,7 +207,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B9",
@@ -218,7 +218,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507B0",
@@ -229,7 +229,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bq",
@@ -240,7 +240,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bw",
@@ -251,7 +251,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Be",
@@ -262,7 +262,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Br",
@@ -273,7 +273,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bt",
@@ -284,7 +284,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507By",
@@ -295,7 +295,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bu",
@@ -306,7 +306,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bi",
@@ -317,7 +317,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bo",
@@ -328,7 +328,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bp",
@@ -339,7 +339,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Ba",
@@ -350,7 +350,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bs",
@@ -361,7 +361,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bd",
@@ -372,7 +372,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bg",
@@ -383,7 +383,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bh",
@@ -394,7 +394,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bj",
@@ -405,7 +405,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bk",
@@ -416,7 +416,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bl",
@@ -427,7 +427,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bz",
@@ -438,7 +438,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bx",
@@ -449,7 +449,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bc",
@@ -460,7 +460,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bv",
@@ -471,7 +471,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bb",
@@ -482,7 +482,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bn",
@@ -493,7 +493,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507Bm",
@@ -504,7 +504,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507qq",
@@ -515,7 +515,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507ww",
@@ -526,7 +526,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507ee",
@@ -537,7 +537,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     },
     {
       "name": "LUMOS-1507rr",
@@ -548,7 +548,7 @@
       "current_voltage_data": [],
       "lowest_voltage_data": [],
       "battery": 0,
-      "override": false
+      "overriden": false
     }
   ]
 }
