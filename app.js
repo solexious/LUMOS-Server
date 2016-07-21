@@ -204,7 +204,7 @@ udpBeat.on('message', function (message, remote) {
       var nodeID = nodeIDs[messageJSON.name] - 1;
 
       // Add voltage percent to nodes
-      nodes[nodeID ].battery = Math.round((messageJSON.current_voltage - messageJSON.min_voltage) / ((messageJSON.max_voltage - messageJSON.min_voltage) / 100));
+      nodes[nodeID ].battery = Math.round((messageJSON.current_voltage - messageJSON.min_led_voltage) / ((messageJSON.max_voltage - messageJSON.min_led_voltage) / 100));
       if(nodes[nodeID].battery < 0){
         nodes[nodeID].battery = 0;
       }
