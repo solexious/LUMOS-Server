@@ -1,7 +1,7 @@
 {
   "nodes": [
     {
-      "name": "LUMOS-145DEF",
+      "name": "LUMOS-1507BF",
       "nodeID": 1,
       "colour": "000000",
       "enabled": true,
@@ -12,7 +12,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-146035",
+      "name": "LUMOS-150857",
       "nodeID": 2,
       "colour": "000000",
       "enabled": true,
@@ -23,7 +23,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-145DED",
+      "name": "LUMOS-03CC51",
       "nodeID": 3,
       "colour": "000000",
       "enabled": true,
@@ -34,7 +34,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-145D55",
+      "name": "LUMOS-03D196",
       "nodeID": 4,
       "colour": "000000",
       "enabled": true,
@@ -45,7 +45,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-147EF9",
+      "name": "LUMOS-02C717",
       "nodeID": 5,
       "colour": "000000",
       "enabled": true,
@@ -56,7 +56,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-148E65",
+      "name": "LUMOS-14B719",
       "nodeID": 6,
       "colour": "000000",
       "enabled": true,
@@ -67,7 +67,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-15063D",
+      "name": "LUMOS-03CF7C",
       "nodeID": 7,
       "colour": "000000",
       "enabled": true,
@@ -78,7 +78,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-14B47D",
+      "name": "LUMOS-14610F",
       "nodeID": 8,
       "colour": "000000",
       "enabled": true,
@@ -89,7 +89,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507E9",
+      "name": "LUMOS-02C143",
       "nodeID": 9,
       "colour": "000000",
       "enabled": true,
@@ -100,7 +100,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-150857",
+      "name": "LUMOS-03CE12",
       "nodeID": 10,
       "colour": "000000",
       "enabled": true,
@@ -111,7 +111,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507BF",
+      "name": "LUMOS-02C513",
       "nodeID": 11,
       "colour": "000000",
       "enabled": true,
@@ -122,7 +122,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B1",
+      "name": "LUMOS-02C846",
       "nodeID": 12,
       "colour": "000000",
       "enabled": true,
@@ -133,7 +133,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B2",
+      "name": "LUMOS-03CFFD",
       "nodeID": 13,
       "colour": "000000",
       "enabled": true,
@@ -144,7 +144,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B3",
+      "name": "LUMOS-145E48",
       "nodeID": 14,
       "colour": "000000",
       "enabled": true,
@@ -166,7 +166,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B5",
+      "name": "LUMOS-03D250",
       "nodeID": 16,
       "colour": "000000",
       "enabled": true,
@@ -177,7 +177,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B6",
+      "name": "LUMOS-02CA48",
       "nodeID": 17,
       "colour": "000000",
       "enabled": true,
@@ -188,7 +188,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B7",
+      "name": "LUMOS-02CA2C",
       "nodeID": 18,
       "colour": "000000",
       "enabled": true,
@@ -199,7 +199,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B8",
+      "name": "LUMOS-03CCA1",
       "nodeID": 19,
       "colour": "000000",
       "enabled": true,
@@ -210,7 +210,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B9",
+      "name": "LUMOS-02C57C",
       "nodeID": 20,
       "colour": "000000",
       "enabled": true,
@@ -221,7 +221,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507B0",
+      "name": "LUMOS-03D019",
       "nodeID": 21,
       "colour": "000000",
       "enabled": true,
@@ -232,7 +232,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bq",
+      "name": "LUMOS-02C4F6",
       "nodeID": 22,
       "colour": "000000",
       "enabled": true,
@@ -243,7 +243,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bw",
+      "name": "LUMOS-03C92B",
       "nodeID": 23,
       "colour": "000000",
       "enabled": true,
@@ -254,7 +254,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Be",
+      "name": "LUMOS-03CD9E",
       "nodeID": 24,
       "colour": "000000",
       "enabled": true,
@@ -265,7 +265,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Br",
+      "name": "LUMOS-02C82F",
       "nodeID": 25,
       "colour": "000000",
       "enabled": true,
@@ -276,7 +276,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bt",
+      "name": "LUMOS-02C206",
       "nodeID": 26,
       "colour": "000000",
       "enabled": true,
@@ -287,7 +287,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507By",
+      "name": "LUMOS-03D0E6",
       "nodeID": 27,
       "colour": "000000",
       "enabled": true,
@@ -298,7 +298,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bu",
+      "name": "LUMOS-03D12F",
       "nodeID": 28,
       "colour": "000000",
       "enabled": true,
@@ -309,7 +309,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bi",
+      "name": "LUMOS-02C6E1",
       "nodeID": 29,
       "colour": "000000",
       "enabled": true,
@@ -320,7 +320,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bo",
+      "name": "LUMOS-03CABE",
       "nodeID": 30,
       "colour": "000000",
       "enabled": true,
@@ -331,7 +331,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bp",
+      "name": "LUMOS-02C0B6",
       "nodeID": 31,
       "colour": "000000",
       "enabled": true,
@@ -342,7 +342,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Ba",
+      "name": "LUMOS-03CE02",
       "nodeID": 32,
       "colour": "000000",
       "enabled": true,
@@ -353,7 +353,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bs",
+      "name": "LUMOS-03C5A1",
       "nodeID": 33,
       "colour": "000000",
       "enabled": true,
@@ -364,7 +364,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bd",
+      "name": "LUMOS-02BC73",
       "nodeID": 34,
       "colour": "000000",
       "enabled": true,
@@ -375,7 +375,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bg",
+      "name": "LUMOS-02BE84",
       "nodeID": 35,
       "colour": "000000",
       "enabled": true,
@@ -386,7 +386,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bh",
+      "name": "LUMOS-03D229",
       "nodeID": 36,
       "colour": "000000",
       "enabled": true,
@@ -397,7 +397,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bj",
+      "name": "LUMOS-03CC2D",
       "nodeID": 37,
       "colour": "000000",
       "enabled": true,
@@ -408,7 +408,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bk",
+      "name": "LUMOS-145D55",
       "nodeID": 38,
       "colour": "000000",
       "enabled": true,
@@ -419,7 +419,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bl",
+      "name": "LUMOS-147EF9",
       "nodeID": 39,
       "colour": "000000",
       "enabled": true,
@@ -430,7 +430,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bz",
+      "name": "LUMOS-145DEF",
       "nodeID": 40,
       "colour": "000000",
       "enabled": true,
@@ -441,7 +441,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bx",
+      "name": "LUMOS-150724",
       "nodeID": 41,
       "colour": "000000",
       "enabled": true,
@@ -452,7 +452,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bc",
+      "name": "LUMOS-1506D4",
       "nodeID": 42,
       "colour": "000000",
       "enabled": true,
@@ -463,7 +463,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bv",
+      "name": "LUMOS-15063D",
       "nodeID": 43,
       "colour": "000000",
       "enabled": true,
@@ -474,7 +474,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bb",
+      "name": "LUMOS-145DED",
       "nodeID": 44,
       "colour": "000000",
       "enabled": true,
@@ -485,7 +485,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bn",
+      "name": "LUMOS-144128",
       "nodeID": 45,
       "colour": "000000",
       "enabled": true,
@@ -496,7 +496,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507Bm",
+      "name": "LUMOS-14B47D",
       "nodeID": 46,
       "colour": "000000",
       "enabled": true,
@@ -507,7 +507,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507qq",
+      "name": "LUMOS-14612E",
       "nodeID": 47,
       "colour": "000000",
       "enabled": true,
@@ -518,7 +518,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507ww",
+      "name": "LUMOS-1507E9",
       "nodeID": 48,
       "colour": "000000",
       "enabled": true,
@@ -529,7 +529,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507ee",
+      "name": "LUMOS-148E65",
       "nodeID": 49,
       "colour": "000000",
       "enabled": true,
@@ -540,7 +540,7 @@
       "overriden": false
     },
     {
-      "name": "LUMOS-1507rr",
+      "name": "LUMOS-146035",
       "nodeID": 50,
       "colour": "000000",
       "enabled": true,
